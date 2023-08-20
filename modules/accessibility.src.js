@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Accessibility module
  *
@@ -29,12 +29,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -308,9 +306,11 @@
          * text contains tags.
          * @private
          */
-        function stripHTMLTagsFromString(str) {
-            return typeof str === 'string' ?
-                str.replace(/<\/?[^>]+(>|$)/g, '') : str;
+        function stripHTMLTagsFromString(str, isForExport = false) {
+            return (typeof str === 'string') ?
+                (isForExport ?
+                    str.replace(/<\/?[^>]+(>|$)/g, '') :
+                    str.replace(/<\/?(?!\s)[^>]+(>|$)/g, '')) : str;
         }
         /**
          * Utility function for hiding an element visually, but still keeping it
@@ -682,7 +682,7 @@
         function fireEventOnWrappedOrUnwrappedElement(el, eventObject) {
             const type = eventObject.type;
             const hcEvents = el.hcEvents;
-            if ((doc.createEvent) &&
+            if (!!doc.createEvent &&
                 (el.dispatchEvent || el.fireEvent)) {
                 if (el.dispatchEvent) {
                     el.dispatchEvent(eventObject);
@@ -703,7 +703,7 @@
          */
         function getChartTitle(chart) {
             return stripHTMLTags(chart.options.title.text ||
-                chart.langFormat('accessibility.defaultChartTitle', { chart: chart }));
+                chart.langFormat('accessibility.defaultChartTitle', { chart: chart }), chart.renderer.forExport);
         }
         /**
          * Return string with the axis name/title.
@@ -917,7 +917,7 @@
          * Get relative position of point on an x/y axis from 0 to 1.
          * @private
          */
-        function scrollToPoint(point) {
+        function scrollAxisToPoint(point) {
             const xAxis = point.series.xAxis, yAxis = point.series.yAxis, axis = (xAxis && xAxis.scrollbar ? xAxis : yAxis), scrollbar = (axis && axis.scrollbar);
             if (scrollbar && defined(scrollbar.to) && defined(scrollbar.from)) {
                 const range = scrollbar.to - scrollbar.from;
@@ -947,7 +947,7 @@
             getSeriesA11yElement,
             unhideChartElementFromAT,
             hideSeriesFromAT,
-            scrollToPoint
+            scrollAxisToPoint
         };
 
         return ChartUtilities;
@@ -1445,7 +1445,9 @@
                 const chart = this.chart, credits = chart.credits;
                 if (credits) {
                     if (credits.textStr) {
-                        credits.element.setAttribute('aria-label', chart.langFormat('accessibility.credits', { creditsStr: stripHTMLTags(credits.textStr) }));
+                        credits.element.setAttribute('aria-label', chart.langFormat('accessibility.credits', {
+                            creditsStr: stripHTMLTags(credits.textStr, chart.renderer.forExport)
+                        }));
                     }
                     unhideChartElementFromAT(chart, credits.element);
                 }
@@ -1836,7 +1838,8 @@
                 const chartContainer = (this.chart.announcerContainer || this.createAnnouncerContainer()), div = this.domElementProvider.createElement('div');
                 attr(div, {
                     'aria-hidden': false,
-                    'aria-live': type
+                    'aria-live': type,
+                    'aria-atomic': true
                 });
                 if (this.chart.styledMode) {
                     addClass(div, 'highcharts-visually-hidden');
@@ -1978,7 +1981,7 @@
         function getAnnotationListItems(chart) {
             const labels = getChartAnnotationLabels(chart);
             return labels.map((label) => {
-                const desc = escapeStringForHTML(stripHTMLTagsFromString(getAnnotationLabelDescription(label)));
+                const desc = escapeStringForHTML(stripHTMLTagsFromString(getAnnotationLabelDescription(label), chart.renderer.forExport));
                 return desc ? `<li>${desc}</li>` : '';
             });
         }
@@ -2169,6 +2172,12 @@
                         setTimeout(function () {
                             component.focusDataTable();
                         }, 300);
+                    }
+                });
+                this.addEvent(chart, 'afterHideData', function () {
+                    if (component.viewDataTableButton) {
+                        component.viewDataTableButton
+                            .setAttribute('aria-expanded', 'false');
                     }
                 });
                 this.announcer = new Announcer(chart, 'assertive');
@@ -2364,7 +2373,7 @@
              */
             getLinkedDescription() {
                 const el = this.linkedDescriptionElement, content = el && el.innerHTML || '';
-                return stripHTMLTagsFromString(content);
+                return stripHTMLTagsFromString(content, this.chart.renderer.forExport);
             }
             /**
              * @private
@@ -2409,7 +2418,7 @@
              */
             getSubtitleText() {
                 const subtitle = (this.chart.options.subtitle);
-                return stripHTMLTagsFromString(subtitle && subtitle.text || '');
+                return stripHTMLTagsFromString(subtitle && subtitle.text || '', this.chart.renderer.forExport);
             }
             /**
              * @private
@@ -3662,7 +3671,7 @@
                 const legendTitle = stripHTMLTags((chart.legend &&
                     chart.legend.options.title &&
                     chart.legend.options.title.text ||
-                    '').replace(/<br ?\/?>/g, ' '));
+                    '').replace(/<br ?\/?>/g, ' '), chart.renderer.forExport);
                 const legendLabel = chart.langFormat('accessibility.legend.legendLabel' + (legendTitle ? '' : 'NoTitle'), {
                     chart,
                     legendTitle,
@@ -3710,7 +3719,7 @@
                 }
                 const itemLabel = this.chart.langFormat('accessibility.legend.legendItem', {
                     chart: this.chart,
-                    itemName: stripHTMLTags(item.name),
+                    itemName: stripHTMLTags(item.name, this.chart.renderer.forExport),
                     item
                 });
                 const attribs = {
@@ -3987,7 +3996,7 @@
             const chartA11yOptions = series.chart.options.accessibility, threshold = (chartA11yOptions.series.pointDescriptionEnabledThreshold);
             return !!(threshold !== false &&
                 series.points &&
-                series.points.length >= threshold);
+                series.points.length >= +threshold);
         }
         /**
          * @private
@@ -4003,7 +4012,7 @@
         function shouldSetKeyboardNavPropsOnPoints(series) {
             const chartA11yOptions = series.chart.options.accessibility, seriesNavOptions = chartA11yOptions.keyboardNavigation.seriesNavigation;
             return !!(series.points && (series.points.length <
-                seriesNavOptions.pointNavigationEnabledThreshold ||
+                +seriesNavOptions.pointNavigationEnabledThreshold ||
                 seriesNavOptions.pointNavigationEnabledThreshold === false));
         }
         /**
@@ -4180,7 +4189,7 @@
                 (isString(a11yPointOptions.descriptionFormat) &&
                     format(a11yPointOptions.descriptionFormat, point, series.chart)) ||
                 ((_c = a11yPointOptions.descriptionFormatter) === null || _c === void 0 ? void 0 : _c.call(a11yPointOptions, point)) ||
-                defaultPointDescriptionFormatter(point));
+                defaultPointDescriptionFormatter(point), series.chart.renderer.forExport);
             pointElement.setAttribute('role', 'img');
             pointElement.setAttribute('aria-label', label);
         }
@@ -4267,7 +4276,7 @@
             }
             seriesElement.setAttribute('aria-label', stripHTMLTags(a11yOptions.series.descriptionFormatter &&
                 a11yOptions.series.descriptionFormatter(series) ||
-                defaultSeriesDescriptionFormatter(series)));
+                defaultSeriesDescriptionFormatter(series), series.chart.renderer.forExport));
         }
         /**
          * Put accessible info on series and points of a series.
@@ -6201,10 +6210,10 @@
                 const rangeSelector = this, options = chart.options.rangeSelector, buttonOptions = (options.buttons || rangeSelector.defaultButtons.slice()), selectedOption = options.selected, blurInputs = function () {
                     const minInput = rangeSelector.minInput, maxInput = rangeSelector.maxInput;
                     // #3274 in some case blur is not defined
-                    if (minInput && (minInput.blur)) {
+                    if (minInput && !!minInput.blur) {
                         fireEvent(minInput, 'blur');
                     }
-                    if (maxInput && (maxInput.blur)) {
+                    if (maxInput && !!maxInput.blur) {
                         fireEvent(maxInput, 'blur');
                     }
                 };
@@ -6520,9 +6529,7 @@
                  * @private
                  */
                 function updateExtremes() {
-                    const { maxInput, minInput } = rangeSelector, chartAxis = chart.xAxis[0], dataAxis = chart.scroller && chart.scroller.xAxis ?
-                        chart.scroller.xAxis :
-                        chartAxis, dataMin = dataAxis.dataMin, dataMax = dataAxis.dataMax;
+                    const { maxInput, minInput } = rangeSelector, chartAxis = chart.xAxis[0], unionExtremes = (chart.scroller && chart.scroller.getUnionExtremes()) || chartAxis, dataMin = unionExtremes.dataMin, dataMax = unionExtremes.dataMax;
                     let value = rangeSelector.getInputValue(name);
                     if (value !== Number(input.getAttribute('data-hc-time-previous')) &&
                         isNumber(value)) {
@@ -8188,7 +8195,7 @@
         const { seriesTypes } = SeriesRegistry;
         const { doc } = H;
         const { defined, fireEvent } = U;
-        const { getPointFromXY, getSeriesFromName, scrollToPoint } = ChartUtilities;
+        const { getPointFromXY, getSeriesFromName, scrollAxisToPoint } = ChartUtilities;
         /* *
          *
          *  Functions
@@ -8233,7 +8240,7 @@
                 // Skip all points in a series where pointNavigationEnabledThreshold is
                 // reached
                 (seriesNavOptions.pointNavigationEnabledThreshold &&
-                    seriesNavOptions.pointNavigationEnabledThreshold <=
+                    +seriesNavOptions.pointNavigationEnabledThreshold <=
                         series.points.length);
         }
         /**
@@ -8811,7 +8818,9 @@
              *         This highlighted point.
              */
             function pointHighlight(highlightVisually = true) {
-                const chart = this.series.chart;
+                var _a,
+                    _b;
+                const chart = this.series.chart, tooltipElement = (_b = (_a = chart.tooltip) === null || _a === void 0 ? void 0 : _a.label) === null || _b === void 0 ? void 0 : _b.element;
                 if (!this.isNull && highlightVisually) {
                     this.onMouseOver(); // Show the hover marker and tooltip
                 }
@@ -8822,7 +8831,7 @@
                     // Do not call blur on the element, as it messes up the focus of the
                     // div element of the chart
                 }
-                scrollToPoint(this);
+                scrollAxisToPoint(this);
                 // We focus only after calling onMouseOver because the state change can
                 // change z-index and mess up the element.
                 if (this.graphic) {
@@ -8832,6 +8841,17 @@
                     }
                 }
                 chart.highlightedPoint = this;
+                // Get position of the tooltip.
+                const tooltipTop = tooltipElement === null || tooltipElement === void 0 ? void 0 : tooltipElement.getBoundingClientRect().top;
+                if (tooltipElement && tooltipTop && tooltipTop < 0) {
+                    // Calculate scroll position.
+                    const scrollTop = window.scrollY, newScrollTop = scrollTop + tooltipTop;
+                    // Scroll window to new position.
+                    window.scrollTo({
+                        behavior: 'smooth',
+                        top: newScrollTop
+                    });
+                }
                 return this;
             }
             /**

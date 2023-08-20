@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Boost module
  *
@@ -29,12 +29,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -1981,12 +1979,19 @@
                     shader.reset();
                     // If there are entries in the colorData buffer, build and bind it.
                     if (s.colorData.length > 0) {
-                        shader.setUniform('hasColor', 1.0);
+                        shader.setUniform('hasColor', 1);
                         cbuffer = new WGLVertexBuffer(gl, shader);
-                        cbuffer.build(s.colorData, 'aColor', 4);
+                        cbuffer.build(
+                        // The color array attribute for vertex is assigned from 0,
+                        // so it needs to be shifted to be applied to further
+                        // segments. #18858
+                        Array(s.segments[0].from).concat(s.colorData), 'aColor', 4);
                         cbuffer.bind();
                     }
                     else {
+                        // Set the hasColor uniform to false (0) when the series
+                        // contains no colorData buffer points. #18858
+                        shader.setUniform('hasColor', 0);
                         // #15869, a buffer with fewer points might already be bound by
                         // a different series/chart causing out of range errors
                         gl.disableVertexAttribArray(gl.getAttribLocation(shader.getProgram(), 'aColor'));

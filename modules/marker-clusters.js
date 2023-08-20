@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Marker clusters module for Highcharts
 
@@ -41,5 +41,4 @@ a.markerClusterInfo=m,a.groupMap=m.groupMap);ca.apply(this);m&&a.markerClusterIn
 this.destroyClusteredData(),this.markerClusterSeriesData=this.hasGroupedData?this.points:null)}else ca.apply(this)};B(z,"render",function(){(this.series||[]).forEach(function(a){if(a.markerClusterInfo){const b=((a.markerClusterInfo||{}).pointsState||{}).oldState;(a.options.cluster||{}).animation&&a.markerClusterInfo&&0===a.chart.pointer.pinchDown.length&&"pan"!==((a.xAxis||{}).eventArgs||{}).trigger&&b&&Object.keys(b).length&&(a.markerClusterInfo.clusters.forEach(function(b){a.animateClusterPoint(b)}),
 a.markerClusterInfo.noise.forEach(function(b){a.animateClusterPoint(b)}))}})});B(I,"update",function(){if(this.dataGroup)return Z("Highcharts marker-clusters module: Running `Point.update` when point belongs to clustered series is not supported.",!1,this.series.chart),!1});B(O,"destroy",y.prototype.destroyClusteredData);B(O,"afterRender",function(){const a=(this.options.cluster||{}).drillToCluster;this.markerClusterInfo&&this.markerClusterInfo.clusters&&this.markerClusterInfo.clusters.forEach(function(b){b.point&&
 b.point.graphic&&(b.point.graphic.addClass("highcharts-cluster-point"),a&&b.point&&(b.point.graphic.css({cursor:"pointer"}),b.point.dataLabel&&b.point.dataLabel.css({cursor:"pointer"})),C(b.clusterZone)&&b.point.graphic.addClass(b.clusterZoneClassName||"highcharts-cluster-zone-"+b.clusterZone.zoneIndex))})});B(I,"drillToCluster",function(a){const b=(((a.point||a.target).series.options.cluster||{}).events||{}).drillToCluster;R(b)&&b.call(this,a)});B(ha,"setExtremes",function(){let a=this.chart,b=0,
-d;a.series.forEach(function(a){a.markerClusterInfo&&(d=Y((a.options.cluster||{}).animation),b=d.duration||0)});M(function(){a.tooltip&&a.tooltip.destroy()},b)})});z(n,"masters/modules/marker-clusters.src.js",[],function(){})});
-//# sourceMappingURL=marker-clusters.js.map
+d;a.series.forEach(function(a){a.markerClusterInfo&&(d=Y((a.options.cluster||{}).animation),b=d.duration||0)});M(function(){a.tooltip&&a.tooltip.destroy()},b)})});z(n,"masters/modules/marker-clusters.src.js",[],function(){})});//# sourceMappingURL=marker-clusters.js.map

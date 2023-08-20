@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Dependency wheel module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -157,7 +155,7 @@
          *         Dependency wheel
          *
          * @extends      plotOptions.sankey
-         * @exclude      dataSorting
+         * @exclude      dataSorting, nodeAlignment
          * @since        7.1.0
          * @product      highcharts
          * @requires     modules/dependency-wheel

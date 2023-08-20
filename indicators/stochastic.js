@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -16,5 +16,4 @@ f.translate.apply(this,arguments);this.points.forEach(b=>{a.forEach((a,g)=>{c=b[
 u;b.toYData=p;b.translate=z}return a}})(p||(p={}));return p});h(a,"Stock/Indicators/Stochastic/StochasticIndicator.js",[a["Stock/Indicators/ArrayUtilities.js"],a["Stock/Indicators/MultipleLinesComposition.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,d,f,h){const {sma:n}=f.seriesTypes,{extend:t,isArray:p,merge:w}=h;class m extends n{constructor(){super(...arguments);this.points=this.options=this.data=void 0}init(){super.init.apply(this,arguments);this.options=w({smoothedLine:{styles:{lineColor:this.color}}},
 this.options)}getValues(d,g){const f=g.periods[0];g=g.periods[1];const h=d.xData,m=(d=d.yData)?d.length:0,n=[],v=[],c=[];var l=null;let b,e;if(!(m<f)&&p(d[0])&&4===d[0].length){var t=!0,r=0;for(e=f-1;e<m;e++){var k=d.slice(e-f+1,e+1);b=a.getArrayExtremes(k,2,1);var q=b[0];k=d[e][3]-q;q=b[1]-q;k=k/q*100;isNaN(k)&&t?r++:(t&&!isNaN(k)&&(t=!1),q=v.push(h[e]),isNaN(k)?c.push([c[q-2]&&"number"===typeof c[q-2][0]?c[q-2][0]:null,null]):c.push([k,null]),e>=r+(f-1)+(g-1)&&(l=super.getValues({xData:v.slice(-g),
 yData:c.slice(-g)},{period:g}),l=l.yData[0]),n.push([h[e],k,l]),c[q-1][1]=l)}return{values:n,xData:v,yData:c}}}}m.defaultOptions=w(n.defaultOptions,{params:{index:void 0,period:void 0,periods:[14,3]},marker:{enabled:!1},tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span><b> {series.name}</b><br/>%K: {point.y}<br/>%D: {point.smoothed}<br/>'},smoothedLine:{styles:{lineWidth:1,lineColor:void 0}},dataGrouping:{approximation:"averages"}});t(m.prototype,{areaLinesNames:[],nameComponents:["periods"],
-nameBase:"Stochastic",pointArrayMap:["y","smoothed"],parallelArrays:["x","y","smoothed"],pointValKey:"y",linesApiNames:["smoothedLine"]});d.compose(m);f.registerSeriesType("stochastic",m);"";return m});h(a,"masters/indicators/stochastic.src.js",[],function(){})});
-//# sourceMappingURL=stochastic.js.map
+nameBase:"Stochastic",pointArrayMap:["y","smoothed"],parallelArrays:["x","y","smoothed"],pointValKey:"y",linesApiNames:["smoothedLine"]});d.compose(m);f.registerSeriesType("stochastic",m);"";return m});h(a,"masters/indicators/stochastic.src.js",[],function(){})});//# sourceMappingURL=stochastic.js.map

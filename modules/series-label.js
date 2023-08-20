@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Torstein Honsi
 
@@ -22,5 +22,4 @@ for(a=0;a<g;a+=16)f=d.getPointAtLength(a),e({chartX:c+f.x,chartY:h+f.y,plotX:f.x
 m=1;m<d;m+=1)e({chartX:n.chartX+m/d*(k.chartX-n.chartX),chartY:n.chartY+m/d*(k.chartY-n.chartY),chartCenterY:(n.chartCenterY||0)+m/d*((k.chartCenterY||0)-(n.chartCenterY||0)),plotX:(n.plotX||0)+m/d*(b-(n.plotX||0)),plotY:(n.plotY||0)+m/d*(g-(n.plotY||0))})}e(k);n=k}}return b}}function C(a){if(this.renderer){const e=this;let f=I(e.renderer.globalAnimation).duration;e.labelSeries=[];e.labelSeriesMaxSum=0;e.seriesLabelTimer&&m.clearTimeout(e.seriesLabelTimer);e.series.forEach(function(b){const k=b.options.label||
 {},d=b.labelBySeries,h=d&&d.closest;k.enabled&&b.visible&&(b.graph||b.area)&&!b.boosted&&e.labelSeries&&(e.labelSeries.push(b),k.minFontSize&&k.maxFontSize&&b.yData&&(b.sum=b.yData.reduce((a,b)=>(a||0)+(b||0),0),e.labelSeriesMaxSum=Math.max(e.labelSeriesMaxSum||0,b.sum||0)),"load"===a.type&&(f=Math.max(f,I(b.options.animation).duration)),h&&("undefined"!==typeof h[0].plotX?d.animate({x:h[0].plotX+h[1],y:h[0].plotY+h[2]}):d.attr({opacity:0})))});e.seriesLabelTimer=T(function(){e.series&&e.labelSeries&&
 A(e)},e.renderer.forExport||!f?0:f)}}function O(a,e,f,b,k){const d=k&&k.anchorX;k=k&&k.anchorY;let h,m,g=f/2;H(d)&&H(k)&&(h=[["M",d,k]],m=e-k,0>m&&(m=-b-m),m<f&&(g=d<a+f/2?m:f-m),k>e+b?h.push(["L",a+g,e+b]):k<e?h.push(["L",a+g,e]):d<a?h.push(["L",a,e+b/2]):d>a+f&&h.push(["L",a+f,e+b/2]));return h||[]}const {animObject:I}=a,{format:R}=x,{setOptions:M}=f,{boxIntersectLine:K,intersectRect:Q}=y,{addEvent:N,extend:L,fireEvent:S,isNumber:H,pick:E,syncTimeout:T}=m,J=[];"";return{compose:function(a,e){m.pushUnique(J,
-a)&&(N(q,"load",C),N(q,"redraw",C));m.pushUnique(J,e)&&(e.prototype.symbols.connector=O);m.pushUnique(J,M)&&M({plotOptions:{series:{label:P}}})}}});x(a,"masters/modules/series-label.src.js",[a["Core/Globals.js"],a["Extensions/SeriesLabel/SeriesLabel.js"]],function(a,q){q.compose(a.Chart,a.SVGRenderer)})});
-//# sourceMappingURL=series-label.js.map
+a)&&(N(q,"load",C),N(q,"redraw",C));m.pushUnique(J,e)&&(e.prototype.symbols.connector=O);m.pushUnique(J,M)&&M({plotOptions:{series:{label:P}}})}}});x(a,"masters/modules/series-label.src.js",[a["Core/Globals.js"],a["Extensions/SeriesLabel/SeriesLabel.js"]],function(a,q){q.compose(a.Chart,a.SVGRenderer)})});//# sourceMappingURL=series-label.js.map

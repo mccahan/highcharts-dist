@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -15,5 +15,4 @@ this.nextPoints){if((b=h.getGraphPath.call(this,this.nextPoints))&&b.length){b[0
 null!==d&&(c[b[f]]=this.yAxis.toPixels(d,!0))})})}const m=[],A=["bottomLine"],v=["top","bottom"],w=["top"];c.compose=function(a){if(g.pushUnique(m,a)){const b=a.prototype;b.linesApiNames=b.linesApiNames||A.slice();b.pointArrayMap=b.pointArrayMap||v.slice();b.pointValKey=b.pointValKey||"top";b.areaLinesNames=b.areaLinesNames||w.slice();b.drawGraph=y;b.getGraphPath=f;b.toYData=k;b.translate=u}return a}})(f||(f={}));return f});e(c,"Stock/Indicators/ABands/ABandsIndicator.js",[c["Stock/Indicators/MultipleLinesComposition.js"],
 c["Core/Series/SeriesRegistry.js"],c["Core/Utilities.js"]],function(c,g,h){const {sma:e}=g.seriesTypes,{correctFloat:n,extend:p,merge:f}=h;class k extends e{constructor(){super(...arguments);this.points=this.options=this.data=void 0}getValues(c,f){const e=f.period,g=f.factor;f=f.index;const k=c.xData,h=(c=c.yData)?c.length:0,m=[],p=[],v=[],w=[],a=[];let b;if(!(h<e)){for(b=0;b<=h;b++){if(b<h){var d=c[b][2];var q=c[b][1];var l=g;d=n(q-d)/(n(q+d)/2)*1E3*l;m.push(c[b][1]*n(1+2*d));p.push(c[b][2]*n(1-
 2*d))}if(b>=e){d=k.slice(b-e,b);var r=c.slice(b-e,b);l=super.getValues.call(this,{xData:d,yData:m.slice(b-e,b)},{period:e});q=super.getValues.call(this,{xData:d,yData:p.slice(b-e,b)},{period:e});r=super.getValues.call(this,{xData:d,yData:r},{period:e,index:f});d=r.xData[0];l=l.yData[0];q=q.yData[0];r=r.yData[0];v.push([d,l,r,q]);w.push(d);a.push([l,r,q])}}return{values:v,xData:w,yData:a}}}}k.defaultOptions=f(e.defaultOptions,{params:{period:20,factor:.001,index:3},lineWidth:1,topLine:{styles:{lineWidth:1}},
-bottomLine:{styles:{lineWidth:1}},dataGrouping:{approximation:"averages"}});p(k.prototype,{areaLinesNames:["top","bottom"],linesApiNames:["topLine","bottomLine"],nameBase:"Acceleration Bands",nameComponents:["period","factor"],pointArrayMap:["top","middle","bottom"],pointValKey:"middle"});c.compose(k);g.registerSeriesType("abands",k);"";return k});e(c,"masters/indicators/acceleration-bands.src.js",[],function(){})});
-//# sourceMappingURL=acceleration-bands.js.map
+bottomLine:{styles:{lineWidth:1}},dataGrouping:{approximation:"averages"}});p(k.prototype,{areaLinesNames:["top","bottom"],linesApiNames:["topLine","bottomLine"],nameBase:"Acceleration Bands",nameComponents:["period","factor"],pointArrayMap:["top","middle","bottom"],pointValKey:"middle"});c.compose(k);g.registerSeriesType("abands",k);"";return k});e(c,"masters/indicators/acceleration-bands.src.js",[],function(){})});//# sourceMappingURL=acceleration-bands.js.map

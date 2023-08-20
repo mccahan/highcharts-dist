@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Debugger module
 
@@ -28,5 +28,4 @@ text:'<h1>Invalid attribute or tagName</h1><p>This error occurs if HTML in the c
 b(a,"Extensions/Debugger/Debugger.js",[a["Extensions/Debugger/ErrorMessages.js"],a["Core/Globals.js"],a["Core/Defaults.js"],a["Core/Utilities.js"]],function(a,c,b,e){function g(){var a=this.errorElements;if(a&&a.length)for(var d=0;d<a.length;d++)a[d].destroy();delete this.errorElements}function h(b){var d=b.chart||n(this.charts.slice().reverse(),function(a){return!!a});if(d){var c=b.code,e=d.options.chart;b=d.renderer;if(d.errorElements){var f=0;for(var g=d.errorElements;f<g.length;f++){var h=g[f];
 h&&h.destroy()}}e&&e.displayErrors&&b&&(d.errorElements=[],c=p(c)?"Highcharts error #"+c+": "+a[c].text:c,e=d.chartWidth,f=d.chartHeight,c=c.replace(/<h1>(.*)<\/h1>/g,'<br><span style="font-size: 2em">$1</span><br>').replace(/<p>/g,"").replace(/<\/p>/g,"<br>"),d.errorElements[0]=b.rect(2,2,e-4,f-4).attr({"stroke-width":4,stroke:"#ff0000",zIndex:3}).add(),d.errorElements[1]=b.label(c,0,0,"rect",void 0,void 0,void 0,void 0,"debugger").css({color:"#ffffff",fontSize:"0.8em",width:e-16+"px",padding:0}).attr({fill:"rgba(255, 0, 0, 0.9)",
 width:e,padding:8,zIndex:10}).add(),d.errorElements[1].attr({y:f-d.errorElements[1].getBBox().height}))}}var l=b.setOptions,m=e.addEvent,n=e.find,p=e.isNumber,k=[],q={chart:{displayErrors:!0}};return{compose:function(a){e.pushUnique(k,a)&&m(a,"beforeRedraw",g);e.pushUnique(k,c)&&m(c,"displayError",h);e.pushUnique(k,l)&&l(q)}}});b(a,"masters/modules/debugger.src.js",[a["Core/Globals.js"],a["Extensions/Debugger/Debugger.js"],a["Extensions/Debugger/ErrorMessages.js"]],function(a,c,b){a.errorMessages=
-b;c.compose(a.Chart)})});
-//# sourceMappingURL=debugger.js.map
+b;c.compose(a.Chart)})});//# sourceMappingURL=debugger.js.map

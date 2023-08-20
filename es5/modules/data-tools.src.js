@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Highcharts
  *
@@ -28,15 +28,291 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
+    _registerModule(_modules, 'Data/Modifiers/DataModifier.js', [_modules['Core/Utilities.js']], function (U) {
+        /* *
+         *
+         *  (c) 2009-2023 Highsoft AS
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         *  Authors:
+         *  - Sophie Bremer
+         *  - Gøran Slettemark
+         *
+         * */
+        var addEvent = U.addEvent,
+            fireEvent = U.fireEvent,
+            merge = U.merge;
+        /* *
+         *
+         *  Class
+         *
+         * */
+        /**
+         * Abstract class to provide an interface for modifying a table.
+         *
+         * @private
+         */
+        var DataModifier = /** @class */ (function () {
+                function DataModifier() {
+                }
+                /* *
+                 *
+                 *  Functions
+                 *
+                 * */
+                /**
+                 * Runs a timed execution of the modifier on the given datatable.
+                 * Can be configured to run multiple times.
+                 *
+                 * @param {DataTable} dataTable
+                 * The datatable to execute
+                 *
+                 * @param {DataModifier.BenchmarkOptions} options
+                 * Options. Currently supports `iterations` for number of iterations.
+                 *
+                 * @return {Array<number>}
+                 * An array of times in milliseconds
+                 *
+                 */
+                DataModifier.prototype.benchmark = function (dataTable, options) {
+                    var results = [];
+                var modifier = this;
+                var execute = function () {
+                        modifier.modifyTable(dataTable);
+                    modifier.emit({
+                        type: 'afterBenchmarkIteration'
+                    });
+                };
+                var defaultOptions = {
+                        iterations: 1
+                    };
+                var iterations = merge(defaultOptions,
+                    options).iterations;
+                modifier.on('afterBenchmarkIteration', function () {
+                    if (results.length === iterations) {
+                        modifier.emit({
+                            type: 'afterBenchmark',
+                            results: results
+                        });
+                        return;
+                    }
+                    // Run again
+                    execute();
+                });
+                var times = {
+                        startTime: 0,
+                        endTime: 0
+                    };
+                // Add timers
+                modifier.on('modify', function () {
+                    times.startTime = window.performance.now();
+                });
+                modifier.on('afterModify', function () {
+                    times.endTime = window.performance.now();
+                    results.push(times.endTime - times.startTime);
+                });
+                // Initial run
+                execute();
+                return results;
+            };
+            /**
+             * Emits an event on the modifier to all registered callbacks of this event.
+             *
+             * @param {DataModifier.Event} [e]
+             * Event object containing additonal event information.
+             */
+            DataModifier.prototype.emit = function (e) {
+                fireEvent(this, e.type, e);
+            };
+            /**
+             * Returns a modified copy of the given table.
+             *
+             * @param {Highcharts.DataTable} table
+             * Table to modify.
+             *
+             * @param {DataEvent.Detail} [eventDetail]
+             * Custom information for pending events.
+             *
+             * @return {Promise<Highcharts.DataTable>}
+             * Table with `modified` property as a reference.
+             */
+            DataModifier.prototype.modify = function (table, eventDetail) {
+                var modifier = this;
+                return new Promise(function (resolve, reject) {
+                    if (table.modified === table) {
+                        table.modified = table.clone(false, eventDetail);
+                    }
+                    try {
+                        resolve(modifier.modifyTable(table, eventDetail));
+                    }
+                    catch (e) {
+                        modifier.emit({
+                            type: 'error',
+                            detail: eventDetail,
+                            table: table
+                        });
+                        reject(e);
+                    }
+                });
+            };
+            /**
+             * Applies partial modifications of a cell change to the property `modified`
+             * of the given modified table.
+             *
+             * @param {Highcharts.DataTable} table
+             * Modified table.
+             *
+             * @param {string} columnName
+             * Column name of changed cell.
+             *
+             * @param {number|undefined} rowIndex
+             * Row index of changed cell.
+             *
+             * @param {Highcharts.DataTableCellType} cellValue
+             * Changed cell value.
+             *
+             * @param {Highcharts.DataTableEventDetail} [eventDetail]
+             * Custom information for pending events.
+             *
+             * @return {Highcharts.DataTable}
+             * Table with `modified` property as a reference.
+             */
+            DataModifier.prototype.modifyCell = function (table, columnName, rowIndex, cellValue, eventDetail) {
+                return this.modifyTable(table);
+            };
+            /**
+             * Applies partial modifications of column changes to the property
+             * `modified` of the given table.
+             *
+             * @param {Highcharts.DataTable} table
+             * Modified table.
+             *
+             * @param {Highcharts.DataTableColumnCollection} columns
+             * Changed columns as a collection, where the keys are the column names.
+             *
+             * @param {number} [rowIndex=0]
+             * Index of the first changed row.
+             *
+             * @param {Highcharts.DataTableEventDetail} [eventDetail]
+             * Custom information for pending events.
+             *
+             * @return {Highcharts.DataTable}
+             * Table with `modified` property as a reference.
+             */
+            DataModifier.prototype.modifyColumns = function (table, columns, rowIndex, eventDetail) {
+                return this.modifyTable(table);
+            };
+            /**
+             * Applies partial modifications of row changes to the property `modified`
+             * of the given table.
+             *
+             * @param {Highcharts.DataTable} table
+             * Modified table.
+             *
+             * @param {Array<(Highcharts.DataTableRow|Highcharts.DataTableRowObject)>} rows
+             * Changed rows.
+             *
+             * @param {number} [rowIndex]
+             * Index of the first changed row.
+             *
+             * @param {Highcharts.DataTableEventDetail} [eventDetail]
+             * Custom information for pending events.
+             *
+             * @return {Highcharts.DataTable}
+             * Table with `modified` property as a reference.
+             */
+            DataModifier.prototype.modifyRows = function (table, rows, rowIndex, eventDetail) {
+                return this.modifyTable(table);
+            };
+            /**
+             * Registers a callback for a specific modifier event.
+             *
+             * @param {string} type
+             * Event type as a string.
+             *
+             * @param {DataEventEmitter.Callback} callback
+             * Function to register for an modifier callback.
+             *
+             * @return {Function}
+             * Function to unregister callback from the modifier event.
+             */
+            DataModifier.prototype.on = function (type, callback) {
+                return addEvent(this, type, callback);
+            };
+            return DataModifier;
+        }());
+        /* *
+         *
+         *  Class Namespace
+         *
+         * */
+        /**
+         * Additionally provided types for modifier events and options.
+         * @private
+         */
+        (function (DataModifier) {
+            /* *
+             *
+             *  Declarations
+             *
+             * */
+            /* *
+             *
+             *  Constants
+             *
+             * */
+            /**
+             * Registry as a record object with modifier names and their class
+             * constructor.
+             */
+            DataModifier.types = {};
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            /**
+             * Adds a modifier class to the registry. The modifier class has to provide
+             * the `DataModifier.options` property and the `DataModifier.modifyTable`
+             * method to modify the table.
+             *
+             * @private
+             *
+             * @param {string} key
+             * Registry key of the modifier class.
+             *
+             * @param {DataModifierType} DataModifierClass
+             * Modifier class (aka class constructor) to register.
+             *
+             * @return {boolean}
+             * Returns true, if the registration was successful. False is returned, if
+             * their is already a modifier registered with this key.
+             */
+            function registerType(key, DataModifierClass) {
+                return (!!key &&
+                    !DataModifier.types[key] &&
+                    !!(DataModifier.types[key] = DataModifierClass));
+            }
+            DataModifier.registerType = registerType;
+        })(DataModifier || (DataModifier = {}));
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+
+        return DataModifier;
+    });
     _registerModule(_modules, 'Data/DataTable.js', [_modules['Core/Utilities.js']], function (U) {
         /* *
          *
@@ -1299,7 +1575,7 @@
 
         return DataTable;
     });
-    _registerModule(_modules, 'Data/Connectors/DataConnector.js', [_modules['Data/DataTable.js'], _modules['Core/Utilities.js']], function (DataTable, U) {
+    _registerModule(_modules, 'Data/Connectors/DataConnector.js', [_modules['Data/Modifiers/DataModifier.js'], _modules['Data/DataTable.js'], _modules['Core/Utilities.js']], function (DataModifier, DataTable, U) {
         /* *
          *
          *  (c) 2009-2023 Highsoft AS
@@ -1480,8 +1756,18 @@
                     connector.describeColumn(columnNames[i], { index: i });
                 }
             };
+            DataConnector.prototype.setModifierOptions = function (modifierOptions) {
+                var _this = this;
+                var ModifierClass = (modifierOptions &&
+                        DataModifier.types[modifierOptions.type]);
+                return this.table
+                    .setModifier(ModifierClass ?
+                    new ModifierClass(modifierOptions) :
+                    void 0)
+                    .then(function () { return _this; });
+            };
             /**
-             * Starts polling new data after the specific timespan in milliseconds.
+             * Starts polling new data after the specific time span in milliseconds.
              *
              * @param {number} refreshTime
              * Refresh time in milliseconds between polls.
@@ -2287,50 +2573,29 @@
                         e.cursor.type
                     ]).join('\0');
             };
-            /**
-             * This function emits a state cursor related to a table. It will provide
-             * lasting state cursors of the table to listeners.
-             *
-             * @example
-             * ```TypeScript
-             * dataCursor.emit(myTable, {
-             *     type: 'position',
-             *     column: 'city',
-             *     row: 4,
-             *     state: 'hover',
-             * });
-             * ```
-             *
-             * @function #emitCursor
-             *
-             * @param {Data.DataTable} table
-             * The related table of the cursor.
-             *
-             * @param {Data.DataCursor.Type} cursor
-             * The state cursor to emit.
-             *
-             * @param {Event} [event]
-             * Optional event information from a related source.
-             *
-             * @param {boolean} [lasting]
-             * Whether this state cursor should be kept until it is cleared with
-             * {@link DataCursor#remitCursor}.
-             *
-             * @return {Data.DataCursor}
-             * Returns the DataCursor instance for a call chain.
-             */
-            DataCursor.prototype.emitCursor = function (table, cursor, event, lasting) {
-                var tableId = table.id,
+            // Implementation
+            DataCursor.prototype.emitCursor = function (table, groupOrCursor, cursorOrEvent, eventOrLasting, lasting) {
+                var cursor = (typeof groupOrCursor === 'object' ?
+                        groupOrCursor :
+                        cursorOrEvent),
+                    event = (typeof eventOrLasting === 'object' ?
+                        eventOrLasting :
+                        cursorOrEvent),
+                    group = (typeof groupOrCursor === 'string' ?
+                        groupOrCursor :
+                        void 0),
+                    tableId = table.id,
                     state = cursor.state,
                     listeners = (this.listenerMap[tableId] &&
                         this.listenerMap[tableId][state]);
+                lasting = (lasting || eventOrLasting === true);
                 if (listeners) {
                     var stateMap = this.stateMap[tableId] = (this.stateMap[tableId] ||
                             {});
-                    var cursors = stateMap[cursor.state];
+                    var cursors = stateMap[cursor.state] || [];
                     if (lasting) {
-                        if (!cursors) {
-                            cursors = stateMap[cursor.state] = [];
+                        if (!cursors.length) {
+                            stateMap[cursor.state] = cursors;
                         }
                         if (DataCursor.getIndex(cursor, cursors) === -1) {
                             cursors.push(cursor);
@@ -2338,11 +2603,14 @@
                     }
                     var e = {
                             cursor: cursor,
-                            cursors: cursors || [],
+                            cursors: cursors,
                             table: table
                         };
                     if (event) {
                         e.event = event;
+                    }
+                    if (group) {
+                        e.group = group;
                     }
                     var emittingRegister = this.emittingRegister,
                         emittingTag = this.buildEmittingTag(e);
@@ -2636,284 +2904,6 @@
 
         return DataCursor;
     });
-    _registerModule(_modules, 'Data/Modifiers/DataModifier.js', [_modules['Core/Utilities.js']], function (U) {
-        /* *
-         *
-         *  (c) 2009-2023 Highsoft AS
-         *
-         *  License: www.highcharts.com/license
-         *
-         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
-         *
-         *  Authors:
-         *  - Sophie Bremer
-         *  - Gøran Slettemark
-         *
-         * */
-        var addEvent = U.addEvent,
-            fireEvent = U.fireEvent,
-            merge = U.merge;
-        /* *
-         *
-         *  Class
-         *
-         * */
-        /**
-         * Abstract class to provide an interface for modifying a table.
-         *
-         * @private
-         */
-        var DataModifier = /** @class */ (function () {
-                function DataModifier() {
-                }
-                /* *
-                 *
-                 *  Functions
-                 *
-                 * */
-                /**
-                 * Runs a timed execution of the modifier on the given datatable.
-                 * Can be configured to run multiple times.
-                 *
-                 * @param {DataTable} dataTable
-                 * The datatable to execute
-                 *
-                 * @param {DataModifier.BenchmarkOptions} options
-                 * Options. Currently supports `iterations` for number of iterations.
-                 *
-                 * @return {Array<number>}
-                 * An array of times in milliseconds
-                 *
-                 */
-                DataModifier.prototype.benchmark = function (dataTable, options) {
-                    var results = [];
-                var modifier = this;
-                var execute = function () {
-                        modifier.modifyTable(dataTable);
-                    modifier.emit({
-                        type: 'afterBenchmarkIteration'
-                    });
-                };
-                var defaultOptions = {
-                        iterations: 1
-                    };
-                var iterations = merge(defaultOptions,
-                    options).iterations;
-                modifier.on('afterBenchmarkIteration', function () {
-                    if (results.length === iterations) {
-                        modifier.emit({
-                            type: 'afterBenchmark',
-                            results: results
-                        });
-                        return;
-                    }
-                    // Run again
-                    execute();
-                });
-                var times = {
-                        startTime: 0,
-                        endTime: 0
-                    };
-                // Add timers
-                modifier.on('modify', function () {
-                    times.startTime = window.performance.now();
-                });
-                modifier.on('afterModify', function () {
-                    times.endTime = window.performance.now();
-                    results.push(times.endTime - times.startTime);
-                });
-                // Initial run
-                execute();
-                return results;
-            };
-            /**
-             * Emits an event on the modifier to all registered callbacks of this event.
-             *
-             * @param {DataModifier.Event} [e]
-             * Event object containing additonal event information.
-             */
-            DataModifier.prototype.emit = function (e) {
-                fireEvent(this, e.type, e);
-            };
-            /**
-             * Returns a modified copy of the given table.
-             *
-             * @param {Highcharts.DataTable} table
-             * Table to modify.
-             *
-             * @param {DataEvent.Detail} [eventDetail]
-             * Custom information for pending events.
-             *
-             * @return {Promise<Highcharts.DataTable>}
-             * Table with `modified` property as a reference.
-             */
-            DataModifier.prototype.modify = function (table, eventDetail) {
-                var modifier = this;
-                return new Promise(function (resolve, reject) {
-                    if (table.modified === table) {
-                        table.modified = table.clone(false, eventDetail);
-                    }
-                    try {
-                        resolve(modifier.modifyTable(table, eventDetail));
-                    }
-                    catch (e) {
-                        modifier.emit({
-                            type: 'error',
-                            detail: eventDetail,
-                            table: table
-                        });
-                        reject(e);
-                    }
-                });
-            };
-            /**
-             * Applies partial modifications of a cell change to the property `modified`
-             * of the given modified table.
-             *
-             * @param {Highcharts.DataTable} table
-             * Modified table.
-             *
-             * @param {string} columnName
-             * Column name of changed cell.
-             *
-             * @param {number|undefined} rowIndex
-             * Row index of changed cell.
-             *
-             * @param {Highcharts.DataTableCellType} cellValue
-             * Changed cell value.
-             *
-             * @param {Highcharts.DataTableEventDetail} [eventDetail]
-             * Custom information for pending events.
-             *
-             * @return {Highcharts.DataTable}
-             * Table with `modified` property as a reference.
-             */
-            DataModifier.prototype.modifyCell = function (table, columnName, rowIndex, cellValue, eventDetail) {
-                return this.modifyTable(table);
-            };
-            /**
-             * Applies partial modifications of column changes to the property
-             * `modified` of the given table.
-             *
-             * @param {Highcharts.DataTable} table
-             * Modified table.
-             *
-             * @param {Highcharts.DataTableColumnCollection} columns
-             * Changed columns as a collection, where the keys are the column names.
-             *
-             * @param {number} [rowIndex=0]
-             * Index of the first changed row.
-             *
-             * @param {Highcharts.DataTableEventDetail} [eventDetail]
-             * Custom information for pending events.
-             *
-             * @return {Highcharts.DataTable}
-             * Table with `modified` property as a reference.
-             */
-            DataModifier.prototype.modifyColumns = function (table, columns, rowIndex, eventDetail) {
-                return this.modifyTable(table);
-            };
-            /**
-             * Applies partial modifications of row changes to the property `modified`
-             * of the given table.
-             *
-             * @param {Highcharts.DataTable} table
-             * Modified table.
-             *
-             * @param {Array<(Highcharts.DataTableRow|Highcharts.DataTableRowObject)>} rows
-             * Changed rows.
-             *
-             * @param {number} [rowIndex]
-             * Index of the first changed row.
-             *
-             * @param {Highcharts.DataTableEventDetail} [eventDetail]
-             * Custom information for pending events.
-             *
-             * @return {Highcharts.DataTable}
-             * Table with `modified` property as a reference.
-             */
-            DataModifier.prototype.modifyRows = function (table, rows, rowIndex, eventDetail) {
-                return this.modifyTable(table);
-            };
-            /**
-             * Registers a callback for a specific modifier event.
-             *
-             * @param {string} type
-             * Event type as a string.
-             *
-             * @param {DataEventEmitter.Callback} callback
-             * Function to register for an modifier callback.
-             *
-             * @return {Function}
-             * Function to unregister callback from the modifier event.
-             */
-            DataModifier.prototype.on = function (type, callback) {
-                return addEvent(this, type, callback);
-            };
-            return DataModifier;
-        }());
-        /* *
-         *
-         *  Class Namespace
-         *
-         * */
-        /**
-         * Additionally provided types for modifier events and options.
-         * @private
-         */
-        (function (DataModifier) {
-            /* *
-             *
-             *  Declarations
-             *
-             * */
-            /* *
-             *
-             *  Constants
-             *
-             * */
-            /**
-             * Registry as a record object with modifier names and their class
-             * constructor.
-             */
-            DataModifier.types = {};
-            /* *
-             *
-             *  Functions
-             *
-             * */
-            /**
-             * Adds a modifier class to the registry. The modifier class has to provide
-             * the `DataModifier.options` property and the `DataModifier.modifyTable`
-             * method to modify the table.
-             *
-             * @private
-             *
-             * @param {string} key
-             * Registry key of the modifier class.
-             *
-             * @param {DataModifierType} DataModifierClass
-             * Modifier class (aka class constructor) to register.
-             *
-             * @return {boolean}
-             * Returns true, if the registration was successful. False is returned, if
-             * their is already a modifier registered with this key.
-             */
-            function registerType(key, DataModifierClass) {
-                return (!!key &&
-                    !DataModifier.types[key] &&
-                    !!(DataModifier.types[key] = DataModifierClass));
-            }
-            DataModifier.registerType = registerType;
-        })(DataModifier || (DataModifier = {}));
-        /* *
-         *
-         *  Default Export
-         *
-         * */
-
-        return DataModifier;
-    });
     _registerModule(_modules, 'Data/DataPoolDefaults.js', [], function () {
         /* *
          *
@@ -2964,7 +2954,6 @@
         /**
          * Data pool to load connectors on-demand.
          *
-         * @private
          * @class
          * @name Data.DataPool
          *
@@ -2980,8 +2969,9 @@
                 function DataPool(options) {
                     if (options === void 0) { options = DataPoolDefaults; }
                     options.connectors = (options.connectors || []);
-                this.options = options;
                 this.connectors = {};
+                this.options = options;
+                this.waiting = {};
             }
             /* *
              *
@@ -3011,32 +3001,67 @@
              * Returns the connector.
              */
             DataPool.prototype.getConnector = function (name) {
+                var _this = this;
                 var connector = this.connectors[name];
+                // already loaded
                 if (connector) {
-                    // already loaded
                     return Promise.resolve(connector);
                 }
+                var waiting = this.waiting[name];
+                // currently loading
+                if (waiting) {
+                    return new Promise(function (resolve) {
+                        waiting.push(resolve);
+                    });
+                }
+                this.waiting[name] = waiting = [];
                 var connectorOptions = this.getConnectorOptions(name);
                 if (connectorOptions) {
-                    return this.loadConnector(connectorOptions);
+                    return this
+                        .loadConnector(connectorOptions)
+                        .then(function (connector) {
+                        delete _this.waiting[name];
+                        window.setTimeout(function () {
+                            for (var i = 0, iEnd = waiting.length; i < iEnd; ++i) {
+                                waiting[i](connector);
+                            }
+                        }, 1);
+                        return connector;
+                    });
                 }
                 throw new Error("Connector not found. (".concat(name, ")"));
+            };
+            /**
+             * Returns the names of all connectors.
+             *
+             * @private
+             *
+             * @return {Array<string>}
+             * Names of all connectors.
+             */
+            DataPool.prototype.getConnectorIds = function () {
+                var connectors = this.options.connectors,
+                    connectorIds = [];
+                for (var i = 0, iEnd = connectors.length; i < iEnd; ++i) {
+                    connectorIds.push(connectors[i].id);
+                }
+                return connectorIds;
             };
             /**
              * Loads the options of the connector.
              *
              * @private
              *
-             * @param {string} name
+             * @param {string} id
              * Name of the connector.
              *
              * @return {DataPoolConnectorOptions|undefined}
              * Returns the options of the connector, or `undefined` if not found.
              */
-            DataPool.prototype.getConnectorOptions = function (name) {
+            DataPool.prototype.getConnectorOptions = function (id) {
                 var connectors = this.options.connectors;
                 for (var i = 0, iEnd = connectors.length; i < iEnd; ++i) {
-                    if (connectors[i].name === name) {
+                    if (connectors[i].id === id) {
                         return connectors[i];
                     }
                 }
@@ -3046,15 +3071,15 @@
              *
              * @function Data.DataPool#getConnectorTable
              *
-             * @param {string} name
+             * @param {string} connectorId
              * Name of the connector.
              *
              * @return {Promise<Data.DataTable>}
              * Returns the connector table.
              */
-            DataPool.prototype.getConnectorTable = function (name) {
+            DataPool.prototype.getConnectorTable = function (connectorId) {
                 return this
-                    .getConnector(name)
+                    .getConnector(connectorId)
                     .then(function (connector) { return connector.table; });
             };
             /**
@@ -3080,13 +3105,15 @@
                         throw new Error("Connector type not found. (".concat(options.type, ")"));
                     }
                     var connector = new ConnectorClass(options.options);
-                    _this.connectors[options.name] = connector;
                     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    connector.load().then(function (connector) {
+                    connector
+                        .load()
+                        .then(function (connector) {
                         _this.emit({
                             type: 'afterLoad',
                             options: options
                         });
+                        _this.connectors[options.id] = connector;
                         resolve(connector);
                     })['catch'](reject);
                 });
@@ -3121,7 +3148,7 @@
                     options: options
                 });
                 for (var i = 0, iEnd = connectors.length; i < iEnd; ++i) {
-                    if (connectors[i].name === options.name) {
+                    if (connectors[i].id === options.id) {
                         connectors.splice(i, 1);
                         break;
                     }
@@ -5844,7 +5871,7 @@
                         var headers = lines[0].split(itemDelimiter || converter.guessedItemDelimiter || ',');
                         // Remove ""s from the headers
                         for (var i = 0; i < headers.length; i++) {
-                            headers[i] = headers[i].replace(/^["']|["']$/g, '');
+                            headers[i] = headers[i].trim().replace(/^["']|["']$/g, '');
                         }
                         converter.headers = headers;
                         startRow++;
@@ -5979,12 +6006,10 @@
                     if (c === '"') {
                         read(++i);
                         while (i < columnStr.length) {
-                            if (c === '"' && cl !== '"' && cn !== '"') {
+                            if (c === '"') {
                                 break;
                             }
-                            if (c !== '"' || (c === '"' && cl !== '"')) {
-                                token += c;
-                            }
+                            token += c;
                             read(++i);
                         }
                     }
@@ -6212,66 +6237,48 @@
                     table = connector.table,
                     _a = connector.options,
                     csv = _a.csv,
-                    csvURL = _a.csvURL;
-                if (csv) {
-                    // If already loaded, clear the current rows
-                    table.deleteRows();
-                    connector.emit({
-                        type: 'load',
-                        csv: csv,
-                        detail: eventDetail,
-                        table: table
-                    });
-                    converter.parse({ csv: csv });
-                    table.setColumns(converter.getTable().getColumns());
+                    csvURL = _a.csvURL,
+                    dataModifier = _a.dataModifier;
+                connector.emit({
+                    type: 'load',
+                    csv: csv,
+                    detail: eventDetail,
+                    table: table
+                });
+                // If already loaded, clear the current rows
+                table.deleteRows();
+                return Promise
+                    .resolve(csv ?
+                    csv :
+                    csvURL ?
+                        fetch(csvURL || '').then(function (response) { return response.text(); }) :
+                        '')
+                    .then(function (csv) {
+                    if (csv) {
+                        converter.parse({ csv: csv });
+                        table.setColumns(converter.getTable().getColumns());
+                    }
+                    return connector
+                        .setModifierOptions(dataModifier)
+                        .then(function () { return csv; });
+                })
+                    .then(function (csv) {
                     connector.emit({
                         type: 'afterLoad',
                         csv: csv,
                         detail: eventDetail,
                         table: table
                     });
-                }
-                else if (csvURL) {
-                    // Clear the table
-                    connector.table.deleteColumns();
-                    connector.emit({
-                        type: 'load',
-                        detail: eventDetail,
-                        table: connector.table
-                    });
-                    return fetch(csvURL || '')
-                        .then(function (response) { return response.text().then(function (csv) {
-                        connector.converter.parse({ csv: csv });
-                        // On inital fetch we need to set the columns
-                        connector.table.setColumns(connector.converter.getTable().getColumns());
-                        connector.emit({
-                            type: 'afterLoad',
-                            csv: csv,
-                            detail: eventDetail,
-                            table: connector.table
-                        });
-                    }); })['catch'](function (error) {
-                        connector.emit({
-                            type: 'loadError',
-                            detail: eventDetail,
-                            error: error,
-                            table: connector.table
-                        });
-                        return Promise.reject(error);
-                    })
-                        .then(function () {
-                        return connector;
-                    });
-                }
-                else {
+                    return connector;
+                })['catch'](function (error) {
                     connector.emit({
                         type: 'loadError',
                         detail: eventDetail,
-                        error: 'Unable to load: no CSV string or URL was provided',
+                        error: error,
                         table: table
                     });
-                }
-                return Promise.resolve(connector);
+                    throw error;
+                });
             };
             /* *
              *
@@ -6282,7 +6289,8 @@
                 csv: '',
                 csvURL: '',
                 enablePolling: false,
-                dataRefreshRate: 1
+                dataRefreshRate: 1,
+                firstRowAsNames: true
             };
             return CSVConnector;
         }(DataConnector));
@@ -6558,7 +6566,10 @@
              */
             GoogleSheetsConnector.prototype.load = function (eventDetail) {
                 var connector = this,
+                    converter = connector.converter,
+                    table = connector.table,
                     _a = connector.options,
+                    dataModifier = _a.dataModifier,
                     dataRefreshRate = _a.dataRefreshRate,
                     enablePolling = _a.enablePolling,
                     firstRowAsNames = _a.firstRowAsNames,
@@ -6567,47 +6578,47 @@
                     url = GoogleSheetsConnector.buildFetchURL(googleAPIKey,
                     googleSpreadsheetKey,
                     connector.options);
-                // If already loaded, clear the current table
-                connector.table.deleteColumns();
                 connector.emit({
                     type: 'load',
                     detail: eventDetail,
-                    table: connector.table,
+                    table: table,
                     url: url
                 });
+                // If already loaded, clear the current table
+                table.deleteColumns();
                 return fetch(url)
-                    .then(function (response) { return response
-                    .json()
+                    .then(function (response) { return (response.json()); })
                     .then(function (json) {
                     if (isGoogleError(json)) {
                         throw new Error(json.error.message);
                     }
-                    connector.converter.parse({
+                    converter.parse({
                         firstRowAsNames: firstRowAsNames,
                         json: json
                     });
-                    connector.table.setColumns(connector.converter.getTable().getColumns());
+                    table.setColumns(converter.getTable().getColumns());
+                    return connector.setModifierOptions(dataModifier);
+                })
+                    .then(function () {
                     connector.emit({
                         type: 'afterLoad',
                         detail: eventDetail,
-                        table: connector.table,
+                        table: table,
                         url: url
                     });
                     // Polling
                     if (enablePolling) {
                         setTimeout(function () { return connector.load(); }, Math.max(dataRefreshRate || 0, 1) * 1000);
                     }
-                }); })['catch'](function (error) {
+                    return connector;
+                })['catch'](function (error) {
                     connector.emit({
                         type: 'loadError',
                         detail: eventDetail,
                         error: error,
-                        table: connector.table
+                        table: table
                     });
-                    return Promise.reject(error);
-                })
-                    .then(function () {
-                    return connector;
+                    throw error;
                 });
             };
             /* *
@@ -7163,7 +7174,7 @@
          *
          * */
         /**
-         * Class that handles creating a dataconnector from an HTML table.
+         * Class that handles creating a data connector from an HTML table.
          *
          * @private
          */
@@ -7200,16 +7211,20 @@
              * @emits HTMLTableConnector#loadError
              */
             HTMLTableConnector.prototype.load = function (eventDetail) {
-                var connector = this;
-                // If already loaded, clear the current rows
-                connector.table.deleteColumns();
+                var connector = this,
+                    converter = connector.converter,
+                    table = connector.table,
+                    _a = connector.options,
+                    dataModifier = _a.dataModifier,
+                    tableHTML = _a.table;
                 connector.emit({
                     type: 'load',
                     detail: eventDetail,
-                    table: connector.table,
+                    table: table,
                     tableElement: connector.tableElement
                 });
-                var tableHTML = connector.options.table;
+                // If already loaded, clear the current rows
+                table.deleteColumns();
                 var tableElement;
                 if (typeof tableHTML === 'string') {
                     connector.tableID = tableHTML;
@@ -7226,19 +7241,23 @@
                         type: 'loadError',
                         detail: eventDetail,
                         error: error,
-                        table: connector.table
+                        table: table
                     });
                     return Promise.reject(new Error(error));
                 }
-                connector.converter.parse(merge({ tableElement: connector.tableElement }, connector.options), eventDetail);
-                connector.table.setColumns(connector.converter.getTable().getColumns());
-                connector.emit({
-                    type: 'afterLoad',
-                    detail: eventDetail,
-                    table: connector.table,
-                    tableElement: connector.tableElement
+                converter.parse(merge({ tableElement: connector.tableElement }, connector.options), eventDetail);
+                table.setColumns(converter.getTable().getColumns());
+                return connector
+                    .setModifierOptions(dataModifier)
+                    .then(function () {
+                    connector.emit({
+                        type: 'afterLoad',
+                        detail: eventDetail,
+                        table: table,
+                        tableElement: connector.tableElement
+                    });
+                    return connector;
                 });
-                return Promise.resolve(this);
             };
             /* *
              *
@@ -7309,7 +7328,7 @@
             /**
              * Constructs an instance of the modifier chain.
              *
-             * @param {DeepPartial<ChainModifier.Options>} [options]
+             * @param {Partial<ChainModifier.Options>} [options]
              * Options to configure the modifier chain.
              *
              * @param {...DataModifier} [chain]
@@ -7324,10 +7343,14 @@
                 _this.chain = chain;
                 _this.options = merge(ChainModifier.defaultOptions, options);
                 var optionsChain = _this.options.chain || [];
-                for (var i = 0, iEnd = optionsChain.length, ModifierClass = void 0; i < iEnd; ++i) {
-                    ModifierClass = DataModifier.types[optionsChain[i].modifier];
+                for (var i = 0, iEnd = optionsChain.length, modifierOptions = void 0, ModifierClass = void 0; i < iEnd; ++i) {
+                    modifierOptions = optionsChain[i];
+                    if (!modifierOptions.type) {
+                        continue;
+                    }
+                    ModifierClass = DataModifier.types[modifierOptions.type];
                     if (ModifierClass) {
-                        chain.unshift(new ModifierClass(optionsChain[i]));
+                        chain.push(new ModifierClass(modifierOptions));
                     }
                 }
                 return _this;
@@ -7395,6 +7418,9 @@
                 var modifiers = (this.options.reverse ?
                         this.chain.slice().reverse() :
                         this.chain.slice());
+                if (table.modified === table) {
+                    table.modified = table.clone(false, eventDetail);
+                }
                 var promiseChain = Promise.resolve(table);
                 var _loop_1 = function (i,
                     iEnd) {
@@ -7407,7 +7433,8 @@
                     _loop_1(i, iEnd);
                 }
                 promiseChain = promiseChain.then(function (chainTable) {
-                    table.modified = chainTable.modified;
+                    table.modified.deleteColumns();
+                    table.modified.setColumns(chainTable.modified.getColumns());
                     return table;
                 });
                 promiseChain = promiseChain['catch'](function (error) {
@@ -7600,7 +7627,7 @@
              * Default option for the ordered modifier chain.
              */
             ChainModifier.defaultOptions = {
-                modifier: 'Chain'
+                type: 'Chain'
             };
             return ChainModifier;
         }(DataModifier));
@@ -7664,7 +7691,7 @@
             /**
              * Constructs an instance of the invert modifier.
              *
-             * @param {InvertModifier.Options} [options]
+             * @param {Partial<InvertModifier.Options>} [options]
              * Options to configure the invert modifier.
              */
             function InvertModifier(options) {
@@ -7859,7 +7886,7 @@
              * Default options for the invert modifier.
              */
             InvertModifier.defaultOptions = {
-                modifier: 'Invert'
+                type: 'Invert'
             };
             return InvertModifier;
         }(DataModifier));
@@ -8060,8 +8087,8 @@
              * @private
              */
             MathModifier.defaultOptions = {
-                alternativeSeparators: false,
-                modifier: 'Math'
+                type: 'Math',
+                alternativeSeparators: false
             };
             return MathModifier;
         }(DataModifier));
@@ -8124,7 +8151,7 @@
             /**
              * Constructs an instance of the range modifier.
              *
-             * @param {RangeModifier.Options} [options]
+             * @param {Partial<RangeModifier.Options>} [options]
              * Options to configure the range modifier.
              */
             function RangeModifier(options) {
@@ -8153,17 +8180,24 @@
                 var modifier = this;
                 modifier.emit({ type: 'modify', detail: eventDetail, table: table });
                 var _a = modifier.options,
+                    additive = _a.additive,
                     ranges = _a.ranges,
                     strict = _a.strict;
                 if (ranges.length) {
+                    var modified = table.modified;
                     var columns = table.getColumns(),
-                        rows = [],
-                        modified = table.modified;
+                        rows = [];
                     for (var i = 0, iEnd = ranges.length, range = void 0, rangeColumn = void 0; i < iEnd; ++i) {
                         range = ranges[i];
                         if (strict &&
                             typeof range.minValue !== typeof range.maxValue) {
                             continue;
+                        }
+                        if (i > 0 && !additive) {
+                            modified.deleteRows();
+                            modified.setRows(rows);
+                            columns = modified.getColumns();
+                            rows = [];
                         }
                         rangeColumn = (columns[range.column] || []);
                         for (var j = 0, jEnd = rangeColumn.length, cell = void 0, row = void 0; j < jEnd; ++j) {
@@ -8182,7 +8216,9 @@
                             }
                             if (cell >= range.minValue &&
                                 cell <= range.maxValue) {
-                                row = table.getRow(j);
+                                row = (additive ?
+                                    table.getRow(j) :
+                                    modified.getRow(j));
                                 if (row) {
                                     rows.push(row);
                                 }
@@ -8204,8 +8240,7 @@
              * Default options for the range modifier.
              */
             RangeModifier.defaultOptions = {
-                modifier: 'Range',
-                strict: false,
+                type: 'Range',
                 ranges: []
             };
             return RangeModifier;
@@ -8269,7 +8304,7 @@
             /**
              * Constructs an instance of the range modifier.
              *
-             * @param {RangeDataModifier.Options} [options]
+             * @param {Partial<RangeDataModifier.Options>} [options]
              * Options to configure the range modifier.
              */
             function SortModifier(options) {
@@ -8503,7 +8538,7 @@
              * Default options to group table rows.
              */
             SortModifier.defaultOptions = {
-                modifier: 'Sort',
+                type: 'Sort',
                 direction: 'desc',
                 orderByColumn: 'y'
             };

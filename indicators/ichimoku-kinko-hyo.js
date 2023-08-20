@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -20,5 +20,4 @@ this.nextPoints))&&d.length){d[0][0]="L";c=q.seriesTypes.sma.prototype.getGraphP
 b*a);for(b=0;b<p;b++){if(b>=e){var r=l.slice(b-e,b);r=B(r);r=(r.high+r.low)/2}if(b>=d){var t=l.slice(b-d,b);t=B(t);t=(t.high+t.low)/2;m=(r+t)/2}if(b>=c){var w=l.slice(b-c,b);w=B(w);w=(w.high+w.low)/2}q=l[b][3];k=n[b];"undefined"===typeof f[b]&&(f[b]=[]);"undefined"===typeof f[b+d-1]&&(f[b+d-1]=[]);f[b+d-1][0]=r;f[b+d-1][1]=t;f[b+d-1][2]=void 0;"undefined"===typeof f[b+1]&&(f[b+1]=[]);f[b+1][2]=q;b<=d&&(f[b+d-1][3]=void 0,f[b+d-1][4]=void 0);"undefined"===typeof f[b+2*d-2]&&(f[b+2*d-2]=[]);f[b+2*d-
 2][3]=m;f[b+2*d-2][4]=w;h.push(k)}for(b=1;b<=d;b++)h.push(k+b*a);return{values:f,xData:h,yData:f}}}}y.defaultOptions=A(k.defaultOptions,{params:{index:void 0,period:26,periodTenkan:9,periodSenkouSpanB:52},marker:{enabled:!1},tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span> <b> {series.name}</b><br/>TENKAN SEN: {point.tenkanSen:.3f}<br/>KIJUN SEN: {point.kijunSen:.3f}<br/>CHIKOU SPAN: {point.chikouSpan:.3f}<br/>SENKOU SPAN A: {point.senkouSpanA:.3f}<br/>SENKOU SPAN B: {point.senkouSpanB:.3f}<br/>'},
 tenkanLine:{styles:{lineWidth:1,lineColor:void 0}},kijunLine:{styles:{lineWidth:1,lineColor:void 0}},chikouLine:{styles:{lineWidth:1,lineColor:void 0}},senkouSpanA:{styles:{lineWidth:1,lineColor:void 0}},senkouSpanB:{styles:{lineWidth:1,lineColor:void 0}},senkouSpan:{styles:{fill:"rgba(255, 0, 0, 0.5)"}},dataGrouping:{approximation:"ichimoku-averages"}});I(y.prototype,{pointArrayMap:["tenkanSen","kijunSen","chikouSpan","senkouSpanA","senkouSpanB"],pointValKey:"tenkanSen",nameComponents:["periodSenkouSpanB",
-"period","periodTenkan"]});e["ichimoku-averages"]=function(){const a=[];let c;[].forEach.call(arguments,function(d,k){a.push(e.average(d));c=!c&&"undefined"===typeof a[k]});return c?void 0:a};q.registerSeriesType("ikh",y);"";return y});m(e,"masters/indicators/ichimoku-kinko-hyo.src.js",[],function(){})});
-//# sourceMappingURL=ichimoku-kinko-hyo.js.map
+"period","periodTenkan"]});e["ichimoku-averages"]=function(){const a=[];let c;[].forEach.call(arguments,function(d,k){a.push(e.average(d));c=!c&&"undefined"===typeof a[k]});return c?void 0:a};q.registerSeriesType("ikh",y);"";return y});m(e,"masters/indicators/ichimoku-kinko-hyo.src.js",[],function(){})});//# sourceMappingURL=ichimoku-kinko-hyo.js.map

@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -15,5 +15,4 @@ this.nextPoints){if((a=k.getGraphPath.call(this,this.nextPoints))&&a.length){a[0
 null!==c&&(n[a[e]]=this.yAxis.toPixels(c,!0))})})}const g=[],x=["bottomLine"],e=["top","bottom"],l=["top"];a.compose=function(b){if(d.pushUnique(g,b)){const a=b.prototype;a.linesApiNames=a.linesApiNames||x.slice();a.pointArrayMap=a.pointArrayMap||e.slice();a.pointValKey=a.pointValKey||"top";a.areaLinesNames=a.areaLinesNames||l.slice();a.drawGraph=u;a.getGraphPath=h;a.toYData=r;a.translate=c}return b}})(g||(g={}));return g});f(a,"Stock/Indicators/Aroon/AroonIndicator.js",[a["Stock/Indicators/MultipleLinesComposition.js"],
 a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,d,k){function f(a,f){let h=a[0],d=0,c;for(c=1;c<a.length;c++)if("max"===f&&a[c]>=h||"min"===f&&a[c]<=h)h=a[c],d=c;return d}const {sma:q}=d.seriesTypes,{extend:t,merge:g,pick:v}=k;class m extends q{constructor(){super(...arguments);this.points=this.options=this.data=void 0}getValues(a,d){d=d.period;const h=a.xData,g=(a=a.yData)?a.length:0,c=[],k=[],m=[];let e;for(e=d-1;e<g;e++){var l=a.slice(e-d+1,e+2);var b=f(l.map(function(a){return v(a[2],
 a)}),"min");l=f(l.map(function(a){return v(a[1],a)}),"max");l=l/d*100;b=b/d*100;h[e+1]&&(c.push([h[e+1],l,b]),k.push(h[e+1]),m.push([l,b]))}return{values:c,xData:k,yData:m}}}m.defaultOptions=g(q.defaultOptions,{params:{index:void 0,period:25},marker:{enabled:!1},tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span><b> {series.name}</b><br/>Aroon Up: {point.y}<br/>Aroon Down: {point.aroonDown}<br/>'},aroonDown:{styles:{lineWidth:1,lineColor:void 0}},dataGrouping:{approximation:"averages"}});
-t(m.prototype,{areaLinesNames:[],linesApiNames:["aroonDown"],nameBase:"Aroon",pointArrayMap:["y","aroonDown"],pointValKey:"y"});a.compose(m);d.registerSeriesType("aroon",m);"";return m});f(a,"masters/indicators/aroon.src.js",[],function(){})});
-//# sourceMappingURL=aroon.js.map
+t(m.prototype,{areaLinesNames:[],linesApiNames:["aroonDown"],nameBase:"Aroon",pointArrayMap:["y","aroonDown"],pointValKey:"y"});a.compose(m);d.registerSeriesType("aroon",m);"";return m});f(a,"masters/indicators/aroon.src.js",[],function(){})});//# sourceMappingURL=aroon.js.map

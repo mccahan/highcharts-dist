@@ -1,5 +1,5 @@
 /*
- Highmaps JS v11.1.0 (2023-06-05)
+ Highmaps JS v11.1.0 (2023-08-20)
 
  Tilemap module
 
@@ -21,5 +21,4 @@ d){({addEvent:d}=d);d(a,"afterSetAxisTranslation",function(){if(!this.recomputin
 m(a,"Series/Tilemap/TilemapSeries.js",[a["Core/Globals.js"],a["Core/Series/SeriesRegistry.js"],a["Series/Tilemap/TilemapPoint.js"],a["Series/Tilemap/TilemapShapes.js"],a["Core/Utilities.js"]],function(a,d,m,e,t){({noop:a}=a);const {seriesTypes:{column:f,heatmap:g,scatter:p}}=d,{extend:b,merge:c}=t;class n extends g{constructor(){super(...arguments);this.tileShape=this.points=this.options=this.data=void 0}alignDataLabel(){return this.tileShape.alignDataLabel.apply(this,Array.prototype.slice.call(arguments))}drawPoints(){f.prototype.drawPoints.call(this);
 this.points.forEach(a=>{a.graphic&&a.graphic[this.chart.styledMode?"css":"animate"](this.colorAttribs(a))})}getSeriesPixelPadding(a){let b=a.isXAxis;var c=this.tileShape.getSeriesPadding(this);let d;if(!c)return{padding:0,axisLengthFactor:1};d=Math.round(a.translate(b?2*c.xPad:c.yPad,0,1,0,1));c=Math.round(a.translate(b?c.xPad:0,0,1,0,1));return{padding:(a.single?Math.abs(d-c)/2:Math.abs(d-c))||0,axisLengthFactor:b?2:1.1}}setOptions(){const a=super.setOptions.apply(this,Array.prototype.slice.call(arguments));
 this.tileShape=e[a.tileShape];return a}translate(){return this.tileShape.translate.apply(this,Array.prototype.slice.call(arguments))}}n.defaultOptions=c(g.defaultOptions,{marker:null,states:{hover:{halo:{enabled:!0,size:2,opacity:.5,attributes:{zIndex:3}}}},pointPadding:2,tileShape:"hexagon"});b(n.prototype,{getSymbol:a,markerAttribs:p.prototype.markerAttribs,pointAttribs:f.prototype.pointAttribs,pointClass:m});d.registerSeriesType("tilemap",n);"";"";return n});m(a,"masters/modules/tilemap.src.js",
-[],function(){})});
-//# sourceMappingURL=tilemap.js.map
+[],function(){})});//# sourceMappingURL=tilemap.js.map

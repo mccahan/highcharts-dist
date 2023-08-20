@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Sebastian Bochan, Rafal Sebestjanski
 
@@ -9,5 +9,4 @@
 {};b(a,"Series/Lollipop/LollipopPoint.js",[a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,c){const {series:{prototype:{pointClass:b}},seriesTypes:{scatter:{prototype:{pointClass:e}},dumbbell:{prototype:{pointClass:d}}}}=a;({extend:a}=c);class h extends b{constructor(){super(...arguments);this.plotX=this.series=this.options=void 0}}a(h.prototype,{destroy:d.prototype.destroy,pointSetState:e.prototype.setState,setState:d.prototype.setState});return h});b(a,"Series/Lollipop/LollipopSeries.js",
 [a["Series/Lollipop/LollipopPoint.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Series/Series.js"],a["Core/Utilities.js"]],function(a,b,g,e){const {seriesTypes:{column:{prototype:d},dumbbell:{prototype:c}}}=b,{extend:k,merge:l}=e;class f extends g{constructor(){super(...arguments);this.points=this.options=this.data=void 0}drawPoints(){const a=this.points.length;let b=0,c;for(super.drawPoints.apply(this,arguments);b<a;)c=this.points[b],this.drawConnector(c),b++}}f.defaultOptions=l(g.defaultOptions,
 {threshold:0,connectorWidth:1,groupPadding:.2,pointPadding:.1,states:{hover:{lineWidthPlus:0,connectorWidthPlus:1,halo:!1}},lineWidth:0,dataLabels:{align:void 0,verticalAlign:void 0},pointRange:1});k(f.prototype,{alignDataLabel:d.alignDataLabel,crispCol:d.crispCol,drawConnector:c.drawConnector,drawDataLabels:d.drawDataLabels,getColumnMetrics:d.getColumnMetrics,getConnectorAttribs:c.getConnectorAttribs,pointClass:a,translate:d.translate});b.registerSeriesType("lollipop",f);"";return f});b(a,"masters/modules/lollipop.src.js",
-[],function(){})});
-//# sourceMappingURL=lollipop.js.map
+[],function(){})});//# sourceMappingURL=lollipop.js.map

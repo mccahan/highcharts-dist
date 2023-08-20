@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Highcharts cylinder module
 
@@ -14,5 +14,4 @@ b)};a.cylinderPath=function(b){const a=k[this.chartIndex],c=A.call(this,b),d=!c.
 d[0]&&"C"===a[0]&&(b.push(["L",a[5],a[6]]),b.push(["C",a[3],a[4],a[1],a[2],d[5],d[6]]),b.push(["C",d[3],d[4],d[1],d[2],c[1],c[2]]))}b.push(["Z"]);return b};a.getCylinderBack=function(b,a){const c=[];if(p(b)){var d=b[0];const a=b[2];"M"===d[0]&&"L"===a[0]&&(c.push(["M",a[1],a[2]]),c.push(b[3]),c.push(["L",d[1],d[2]]))}else"C"===b[2][0]&&c.push(["M",b[2][5],b[2][6]]),c.push(b[3],b[4]);p(a)?(b=a[0],"M"===b[0]&&(c.push(["L",b[1],b[2]]),c.push(a[3]),c.push(a[2]))):(b=a[2],d=a[3],a=a[4],"C"===b[0]&&"C"===
 d[0]&&"C"===a[0]&&(c.push(["L",a[5],a[6]]),c.push(["C",a[3],a[4],a[1],a[2],d[5],d[6]]),c.push(["C",d[3],d[4],d[1],d[2],b[5],b[6]])));c.push(["Z"]);return c};a.getCylinderEnd=function(a,e,c){const {width:b=0,height:f=0,alphaCorrection:h=0}=e;let k=z(e.depth,b,0),g=Math.min(b,k)/2,q=m*(a.options.chart.options3d.beta-90+h);c=(e.y||0)+(c?f:0);let l=.5519*g,n=b/2+(e.x||0),p=k/2+(e.z||0),r=[{x:0,y:c,z:g},{x:l,y:c,z:g},{x:g,y:c,z:l},{x:g,y:c,z:0},{x:g,y:c,z:-l},{x:l,y:c,z:-g},{x:0,y:c,z:-g},{x:-l,y:c,z:-g},
 {x:-g,y:c,z:-l},{x:-g,y:c,z:0},{x:-g,y:c,z:l},{x:-l,y:c,z:g},{x:0,y:c,z:g}],v=Math.cos(q),w=Math.sin(q),t,u;r.forEach(function(a,b){t=a.x;u=a.z;r[b].x=t*v-u*w+n;r[b].z=u*v+t*w+p});a=x(r,a,!0);return 2.5>Math.abs(a[3].y-a[9].y)&&2.5>Math.abs(a[0].y-a[6].y)?this.toLinePath([a[0],a[3],a[6],a[9]],!0):this.getCurvedPath(a)};a.getCurvedPath=function(a){let b=[["M",a[0].x,a[0].y]],c=a.length-2,d;for(d=1;d<c;d+=3)b.push(["C",a[d].x,a[d].y,a[d+1].x,a[d+1].y,a[d+2].x,a[d+2].y]);return b}});f(a,"Series/Cylinder/CylinderSeries.js",
-[a["Series/Cylinder/CylinderPoint.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,e,f){const {seriesTypes:{column:h}}=e,{extend:n,merge:m}=f;class k extends h{constructor(){super(...arguments);this.points=this.options=this.data=void 0}}k.defaultOptions=m(h.defaultOptions);n(k.prototype,{pointClass:a});e.registerSeriesType("cylinder",k);"";return k});f(a,"masters/modules/cylinder.src.js",[],function(){})});
-//# sourceMappingURL=cylinder.js.map
+[a["Series/Cylinder/CylinderPoint.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,e,f){const {seriesTypes:{column:h}}=e,{extend:n,merge:m}=f;class k extends h{constructor(){super(...arguments);this.points=this.options=this.data=void 0}}k.defaultOptions=m(h.defaultOptions);n(k.prototype,{pointClass:a});e.registerSeriesType("cylinder",k);"";return k});f(a,"masters/modules/cylinder.src.js",[],function(){})});//# sourceMappingURL=cylinder.js.map

@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Solid angular gauge module
 
@@ -14,5 +14,4 @@ module:a[f]}})))}a=a?a._modules:{};c(a,"Core/Axis/SolidGaugeAxis.js",[a["Core/Co
 pie:{prototype:B}}}=c,{clamp:z,extend:w,isNumber:x,merge:b,pick:h,pInt:y}=u;class e extends f{constructor(){super(...arguments);this.thresholdAngleRad=this.startAngleRad=this.yAxis=this.axis=this.options=this.points=this.data=void 0}translate(){const a=this.yAxis;A.init(a);!a.dataClasses&&a.options.dataClasses&&a.initDataClasses(a.options);a.initStops(a.options);f.prototype.translate.call(this)}drawPoints(){const d=this.yAxis,c=d.center,b=this.options,f=this.chart.renderer;var e=b.overshoot;const n=
 b.rounded&&void 0===b.borderRadius;e=x(e)?e/180*Math.PI:0;var l;x(b.threshold)&&(l=d.startAngleRad+d.translate(b.threshold,void 0,void 0,void 0,!0));this.thresholdAngleRad=h(l,d.startAngleRad);for(const k of this.points)if(!k.isNull){var q=y(h(k.options.radius,b.radius,100))*c[2]/200,r=y(h(k.options.innerRadius,b.innerRadius,60))*c[2]/200,t=Math.min(d.startAngleRad,d.endAngleRad),p=Math.max(d.startAngleRad,d.endAngleRad);l=k.graphic;var m=d.startAngleRad+d.translate(k.y,void 0,void 0,void 0,!0);let g=
 d.toColor(k.y,k);"none"===g&&(g=k.color||this.color||"none");"none"!==g&&(k.color=g);m=z(m,t-e,p+e);!1===b.wrap&&(m=z(m,t,p));p=n?(q-r)/2/q:0;t=Math.min(m,this.thresholdAngleRad)-p;m=Math.max(m,this.thresholdAngleRad)+p;m-t>2*Math.PI&&(m=t+2*Math.PI);p=n?"50%":0;b.borderRadius&&(p=a.optionsToObject(b.borderRadius).radius);k.shapeArgs=r={x:c[0],y:c[1],r:q,innerR:r,start:t,end:m,borderRadius:p};k.startR=q;l?(q=r.d,l.animate(w({fill:g},r)),q&&(r.d=q)):k.graphic=l=f.arc(r).attr({fill:g,"sweep-flag":0}).add(this.group);
-this.chart.styledMode||("square"!==b.linecap&&l.attr({"stroke-linecap":"round","stroke-linejoin":"round"}),l.attr({stroke:b.borderColor||"none","stroke-width":b.borderWidth||0}));l&&l.addClass(k.getClassName(),!0)}}animate(a){a||(this.startAngleRad=this.thresholdAngleRad,B.animate.call(this,a))}}e.defaultOptions=b(f.defaultOptions,n);c.registerSeriesType("solidgauge",e);return e});c(a,"masters/modules/solid-gauge.src.js",[],function(){})});
-//# sourceMappingURL=solid-gauge.js.map
+this.chart.styledMode||("square"!==b.linecap&&l.attr({"stroke-linecap":"round","stroke-linejoin":"round"}),l.attr({stroke:b.borderColor||"none","stroke-width":b.borderWidth||0}));l&&l.addClass(k.getClassName(),!0)}}animate(a){a||(this.startAngleRad=this.thresholdAngleRad,B.animate.call(this,a))}}e.defaultOptions=b(f.defaultOptions,n);c.registerSeriesType("solidgauge",e);return e});c(a,"masters/modules/solid-gauge.src.js",[],function(){})});//# sourceMappingURL=solid-gauge.js.map

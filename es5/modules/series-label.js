@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Torstein Honsi
 
@@ -23,5 +23,4 @@ u),16<p))for(p=Math.ceil(p/16),u=1;u<p;u+=1)c({chartX:g.chartX+u/p*(n.chartX-g.c
 b.options.label||{},f=b.labelBySeries,k=f&&f.closest;g.enabled&&b.visible&&(b.graph||b.area)&&!b.boosted&&c.labelSeries&&(c.labelSeries.push(b),g.minFontSize&&g.maxFontSize&&b.yData&&(b.sum=b.yData.reduce(function(a,b){return(a||0)+(b||0)},0),c.labelSeriesMaxSum=Math.max(c.labelSeriesMaxSum||0,b.sum||0)),"load"===a.type&&(e=Math.max(e,G(b.options.animation).duration)),k&&("undefined"!==typeof k[0].plotX?f.animate({x:k[0].plotX+k[1],y:k[0].plotY+k[2]}):f.attr({opacity:0})))});c.seriesLabelTimer=S(function(){c.series&&
 c.labelSeries&&A(c)},c.renderer.forExport||!e?0:e)}}function M(a,c,e,b,g){var f=g&&g.anchorX;g=g&&g.anchorY;var k=e/2;if(F(f)&&F(g)){var h=[["M",f,g]];var l=c-g;0>l&&(l=-b-l);l<e&&(k=f<a+e/2?l:e-l);g>c+b?h.push(["L",a+k,c+b]):g<c?h.push(["L",a+k,c]):f<a?h.push(["L",a,c+b/2]):f>a+e&&h.push(["L",a+e,c+b/2])}return h||[]}var P=this&&this.__spreadArray||function(a,c,e){if(e||2===arguments.length)for(var b=0,g=c.length,f;b<g;b++)!f&&b in c||(f||(f=Array.prototype.slice.call(c,0,b)),f[b]=c[b]);return a.concat(f||
 Array.prototype.slice.call(c))},G=a.animObject,Q=v.format,K=m.setOptions,I=y.boxIntersectLine,O=y.intersectRect,L=h.addEvent,J=h.extend,R=h.fireEvent,F=h.isNumber,D=h.pick,S=h.syncTimeout,H=[];"";return{compose:function(a,c){h.pushUnique(H,a)&&(L(e,"load",C),L(e,"redraw",C));h.pushUnique(H,c)&&(c.prototype.symbols.connector=M);h.pushUnique(H,K)&&K({plotOptions:{series:{label:N}}})}}});v(a,"masters/modules/series-label.src.js",[a["Core/Globals.js"],a["Extensions/SeriesLabel/SeriesLabel.js"]],function(a,
-e){e.compose(a.Chart,a.SVGRenderer)})});
-//# sourceMappingURL=series-label.js.map
+e){e.compose(a.Chart,a.SVGRenderer)})});//# sourceMappingURL=series-label.js.map

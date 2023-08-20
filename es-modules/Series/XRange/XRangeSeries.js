@@ -17,7 +17,7 @@ const { parse: color } = Color;
 import SeriesRegistry from '../../Core/Series/SeriesRegistry.js';
 const { series: { prototype: seriesProto }, seriesTypes: { column: ColumnSeries } } = SeriesRegistry;
 import U from '../../Core/Utilities.js';
-const { addEvent, clamp, defined, extend, find, isNumber, isObject, merge, pick } = U;
+const { addEvent, clamp, defined, extend, find, isNumber, isObject, merge, pick, relativeLength } = U;
 import XRangeSeriesDefaults from './XRangeSeriesDefaults.js';
 import XRangePoint from './XRangePoint.js';
 /* *
@@ -193,7 +193,7 @@ class XRangeSeries extends ColumnSeries {
      * @private
      */
     translatePoint(point) {
-        const xAxis = this.xAxis, yAxis = this.yAxis, metrics = this.columnMetrics, options = this.options, { borderRadius } = options, minPointLength = options.minPointLength || 0, oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2, seriesXOffset = this.pointXOffset = metrics.offset, posX = pick(point.x2, point.x + (point.len || 0));
+        const xAxis = this.xAxis, yAxis = this.yAxis, metrics = this.columnMetrics, options = this.options, minPointLength = options.minPointLength || 0, oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2, seriesXOffset = this.pointXOffset = metrics.offset, posX = pick(point.x2, point.x + (point.len || 0)), borderRadius = options.borderRadius;
         let plotX = point.plotX, plotX2 = xAxis.translate(posX, 0, 0, 0, 1);
         const length = Math.abs(plotX2 - plotX), inverted = this.chart.inverted, borderWidth = pick(options.borderWidth, 1), crisper = borderWidth % 2 / 2;
         let widthDifference, partialFill, yOffset = metrics.offset, pointHeight = Math.round(metrics.width), dlLeft, dlRight, dlWidth, clipRectWidth;
@@ -218,18 +218,18 @@ class XRangeSeries extends ColumnSeries {
             yAxis.categories) {
             point.plotY = yAxis.translate(point.y, 0, 1, 0, 1, options.pointPlacement);
         }
-        const x = Math.floor(Math.min(plotX, plotX2)) + crisper;
-        const x2 = Math.floor(Math.max(plotX, plotX2)) + crisper;
+        const x = Math.floor(Math.min(plotX, plotX2)) + crisper, x2 = Math.floor(Math.max(plotX, plotX2)) + crisper, width = x2 - x;
+        const r = Math.min(relativeLength((typeof borderRadius === 'object' ?
+            borderRadius.radius :
+            borderRadius || 0), pointHeight), Math.min(width, pointHeight) / 2);
         const shapeArgs = {
             x,
             y: Math.floor(point.plotY + yOffset) + crisper,
-            width: x2 - x,
-            height: pointHeight
+            width,
+            height: pointHeight,
+            r
         };
         point.shapeArgs = shapeArgs;
-        if (isNumber(borderRadius)) {
-            point.shapeArgs.r = borderRadius;
-        }
         // Move tooltip to default position
         if (!inverted) {
             point.tooltipPos[0] -= oldColWidth +
@@ -283,11 +283,7 @@ class XRangeSeries extends ColumnSeries {
             if (!isNumber(partialFill)) {
                 partialFill = 0;
             }
-            if (isNumber(borderRadius)) {
-                point.partShapeArgs = merge(shapeArgs, {
-                    r: borderRadius
-                });
-            }
+            point.partShapeArgs = merge(shapeArgs);
             clipRectWidth = Math.max(Math.round(length * partialFill + point.plotX -
                 plotX), 0);
             point.clipRectArgs = {

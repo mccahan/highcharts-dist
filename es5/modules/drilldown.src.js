@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Highcharts Drilldown module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -1908,6 +1906,8 @@
                 seriesI,
                 level,
                 oldExtremes;
+            // Reset symbol and color counters after every drill-up. (#19134)
+            chart.symbolCounter = chart.colorCounter = 0;
             var _loop_1 = function () {
                     var oldSeries,
                 newSeries;
@@ -2479,6 +2479,8 @@
             if (!chart.ddDupes) {
                 chart.ddDupes = [];
             }
+            // Reset the color and symbol counters after every drilldown. (#19134)
+            chart.colorCounter = chart.symbolCounter = 0;
             while (i-- && !seriesOptions) {
                 if (drilldown.series[i].id === this.drilldown &&
                     chart.ddDupes.indexOf(this.drilldown) === -1) {

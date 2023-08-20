@@ -1,5 +1,5 @@
 /*
- Highcharts Gantt JS v11.1.0 (2023-06-05)
+ Highcharts Gantt JS v11.1.0 (2023-08-20)
 
  GridAxis
 
@@ -28,5 +28,4 @@ g=c===d[0];d=c===d[d.length-1];var e=f&&S(f.options.data,function(a){return a[b.
 var x=[],P=function(){function a(b){this.axis=b}a.prototype.isOuterAxis=function(){var b=this.axis,a=b.grid.columnIndex,d=b.linkedParent&&b.linkedParent.grid.columns||b.grid.columns,f=a?b.linkedParent:b,g=-1,e=0;(b.chart[b.coll]||[]).forEach(function(a,c){a.side!==b.side||a.options.isInternal||(e=c,a===f&&(g=c))});return e===g&&(t(a)?d.length===a:!0)};a.prototype.renderBorder=function(a){var b=this.axis,d=b.chart.renderer,f=b.options;a=d.path(a).addClass("highcharts-axis-line").add(b.axisBorder);
 d.styledMode||a.attr({stroke:f.lineColor,"stroke-width":f.lineWidth,zIndex:7});return a};return a}();A.E=function(a){return this.dateFormat("%a",a,!0).charAt(0)};A.W=function(a){var b=this,c=new this.Date(a);["Hours","Milliseconds","Minutes","Seconds"].forEach(function(a){b.set(a,c,0)});var d=(this.get("Day",c)+6)%7;a=new this.Date(c.valueOf());this.set("Date",a,this.get("Date",c)-d+3);d=new this.Date(this.get("FullYear",a),0,1);4!==this.get("Day",d)&&(this.set("Month",c,0),this.set("Date",c,1+(11-
 this.get("Day",d))%7));return(1+Math.floor((a.valueOf()-d.valueOf())/6048E5)).toString()};"";return{compose:function(a,b,c){e.pushUnique(x,a)&&(a.keepProps.push("grid"),a.prototype.getMaxLabelDimensions=m,V(a.prototype,"unsquish",U),k(a,"init",O),k(a,"afterGetOffset",B),k(a,"afterGetTitlePosition",C),k(a,"afterInit",D),k(a,"afterRender",E),k(a,"afterSetAxisTranslation",F),k(a,"afterSetOptions",G),k(a,"afterSetOptions",I),k(a,"afterSetScale",J),k(a,"afterTickSize",K),k(a,"trimTicks",T),k(a,"destroy",
-N));e.pushUnique(x,b)&&k(b,"afterSetChartSize",M);e.pushUnique(x,c)&&(k(c,"afterGetLabelPosition",Q),k(c,"labelFormat",R));return a}}});m(h,"masters/modules/grid-axis.src.js",[h["Core/Globals.js"],h["Core/Axis/GridAxis.js"]],function(h,m){m.compose(h.Axis,h.Chart,h.Tick)})});
-//# sourceMappingURL=grid-axis.js.map
+N));e.pushUnique(x,b)&&k(b,"afterSetChartSize",M);e.pushUnique(x,c)&&(k(c,"afterGetLabelPosition",Q),k(c,"labelFormat",R));return a}}});m(h,"masters/modules/grid-axis.src.js",[h["Core/Globals.js"],h["Core/Axis/GridAxis.js"]],function(h,m){m.compose(h.Axis,h.Chart,h.Tick)})});//# sourceMappingURL=grid-axis.js.map

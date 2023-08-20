@@ -1,5 +1,5 @@
 /**
- * @license Highmaps JS v11.1.0 (2023-06-05)
+ * @license Highmaps JS v11.1.0 (2023-08-20)
  * @module highcharts/modules/heatmap
  * @requires highcharts
  *

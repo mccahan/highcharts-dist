@@ -895,27 +895,6 @@ class SVGElement {
         }
     }
     /**
-     * Fade out an element by animating its opacity down to 0, and hide it on
-     * complete. Used internally for the tooltip.
-     *
-     * @function Highcharts.SVGElement#fadeOut
-     *
-     * @param {number} [duration=150]
-     * The fade duration in milliseconds.
-     */
-    fadeOut(duration) {
-        const elemWrapper = this;
-        elemWrapper.animate({
-            opacity: 0
-        }, {
-            duration: pick(duration, 150),
-            complete: function () {
-                // #3088, assuming we're only using this for tooltips
-                elemWrapper.hide();
-            }
-        });
-    }
-    /**
      * @private
      * @function Highcharts.SVGElement#fillSetter
      * @param {Highcharts.ColorType} value

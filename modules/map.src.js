@@ -1,5 +1,5 @@
 /**
- * @license Highmaps JS v11.1.0 (2023-06-05)
+ * @license Highmaps JS v11.1.0 (2023-08-20)
  *
  * Highmaps as a plugin for Highcharts or Highcharts Stock.
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -5858,7 +5856,7 @@
                         if (point.projectedPath && !point.projectedPath.length) {
                             point.setVisible(false);
                         }
-                        else {
+                        else if (!point.visible) {
                             point.setVisible(true);
                         }
                     });

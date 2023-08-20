@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2010-2021 Highsoft AS
  Author: Sebastian Domas
@@ -15,5 +15,4 @@ isNumber:q,merge:l,objectEach:r}=e,h={"square-root":function(a){return Math.ceil
 1].x2=f;return g}setDerivedData(){var a=this.baseSeries.yData;a.length?(a=this.derivedData(a,this.binsNumber(),this.options.binWidth),this.setData(a,!1)):this.setData([])}}g.defaultOptions=l(k.defaultOptions,{binsNumber:"square-root",binWidth:void 0,pointPadding:0,groupPadding:0,grouping:!1,pointPlacement:"between",tooltip:{headerFormat:"",pointFormat:'<span style="font-size: 0.8em">{point.x} - {point.x2}</span><br/><span style="color:{point.color}">\u25cf</span> {series.name} <b>{point.y}</b><br/>'}});
 b(g.prototype,{hasDerivedData:a.hasDerivedData});a.compose(g);c.registerSeriesType("histogram",g);"";return g});e(a,"Series/Bellcurve/BellcurveSeries.js",[a["Series/DerivedComposition.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,c,e){const {seriesTypes:{areaspline:n}}=c,{correctFloat:k,isNumber:m,merge:p}=e;class d extends n{constructor(){super(...arguments);this.points=this.options=this.data=void 0}static mean(a){const b=a.length;a=a.reduce(function(a,b){return a+b},
 0);return 0<b&&a/b}static standardDeviation(a,c){let b=a.length;c=m(c)?c:d.mean(a);a=a.reduce(function(a,b){b-=c;return a+b*b},0);return 1<b&&Math.sqrt(a/(b-1))}static normalDensity(a,c,d){a-=c;return Math.exp(-(a*a)/(2*d*d))/(d*Math.sqrt(2*Math.PI))}derivedData(a,c){var b=this.options.intervals,e=this.options.pointsInInterval;let h=a-b*c;b=b*e*2+1;e=c/e;let g=[],f;for(f=0;f<b;f++)g.push([h,d.normalDensity(h,a,c)]),h+=e;return g}setDerivedData(){1<this.baseSeries.yData.length&&(this.setMean(),this.setStandardDeviation(),
-this.setData(this.derivedData(this.mean,this.standardDeviation),!1))}setMean(){this.mean=k(d.mean(this.baseSeries.yData))}setStandardDeviation(){this.standardDeviation=k(d.standardDeviation(this.baseSeries.yData,this.mean))}}d.defaultOptions=p(n.defaultOptions,{intervals:3,pointsInInterval:3,marker:{enabled:!1}});a.compose(d);c.registerSeriesType("bellcurve",d);"";return d});e(a,"masters/modules/histogram-bellcurve.src.js",[],function(){})});
-//# sourceMappingURL=histogram-bellcurve.js.map
+this.setData(this.derivedData(this.mean,this.standardDeviation),!1))}setMean(){this.mean=k(d.mean(this.baseSeries.yData))}setStandardDeviation(){this.standardDeviation=k(d.standardDeviation(this.baseSeries.yData,this.mean))}}d.defaultOptions=p(n.defaultOptions,{intervals:3,pointsInInterval:3,marker:{enabled:!1}});a.compose(d);c.registerSeriesType("bellcurve",d);"";return d});e(a,"masters/modules/histogram-bellcurve.src.js",[],function(){})});//# sourceMappingURL=histogram-bellcurve.js.map

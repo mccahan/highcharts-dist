@@ -1,5 +1,5 @@
 /**
- * @license Highstock JS v11.1.0 (2023-06-05)
+ * @license Highstock JS v11.1.0 (2023-08-20)
  *
  * Data grouping module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -1186,8 +1184,7 @@
                 // if we have grouped data, use the grouping information to get the
                 // right format
                 if (currentDataGrouping) {
-                    labelFormats =
-                        dateTimeLabelFormats[currentDataGrouping.unitName];
+                    labelFormats = dateTimeLabelFormats[currentDataGrouping.unitName];
                     if (currentDataGrouping.count === 1) {
                         xDateFormat = labelFormats[0];
                     }

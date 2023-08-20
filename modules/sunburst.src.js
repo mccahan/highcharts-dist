@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * (c) 2016-2021 Highsoft AS
  * Authors: Jon Arild Nygard
@@ -27,12 +27,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -269,9 +267,17 @@
             params.attribs = Object.assign(Object.assign({}, params.attribs), { 'class': point.getClassName() }) || {};
             if ((point.shouldDraw())) {
                 if (!graphic) {
-                    point.graphic = graphic = params.shapeType === 'text' ?
-                        renderer.text() :
-                        renderer[params.shapeType](params.shapeArgs || {});
+                    if (params.shapeType === 'text') {
+                        graphic = renderer.text();
+                    }
+                    else if (params.shapeType === 'image') {
+                        graphic = renderer.image(params.imageUrl || '')
+                            .attr(params.shapeArgs || {});
+                    }
+                    else {
+                        graphic = renderer[params.shapeType](params.shapeArgs || {});
+                    }
+                    point.graphic = graphic;
                     graphic.add(params.group);
                 }
                 if (css) {
@@ -2119,6 +2125,7 @@
                         attribs,
                         css,
                         group: series[groupKey],
+                        imageUrl: point.imageUrl,
                         renderer,
                         shadow,
                         shapeArgs,

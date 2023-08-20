@@ -1,5 +1,5 @@
 /**
- * @license Highcharts Gantt JS v11.1.0 (2023-06-05)
+ * @license Highcharts Gantt JS v11.1.0 (2023-08-20)
  *
  * Gantt series
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -4489,10 +4487,10 @@
                 const rangeSelector = this, options = chart.options.rangeSelector, buttonOptions = (options.buttons || rangeSelector.defaultButtons.slice()), selectedOption = options.selected, blurInputs = function () {
                     const minInput = rangeSelector.minInput, maxInput = rangeSelector.maxInput;
                     // #3274 in some case blur is not defined
-                    if (minInput && (minInput.blur)) {
+                    if (minInput && !!minInput.blur) {
                         fireEvent(minInput, 'blur');
                     }
-                    if (maxInput && (maxInput.blur)) {
+                    if (maxInput && !!maxInput.blur) {
                         fireEvent(maxInput, 'blur');
                     }
                 };
@@ -4808,9 +4806,7 @@
                  * @private
                  */
                 function updateExtremes() {
-                    const { maxInput, minInput } = rangeSelector, chartAxis = chart.xAxis[0], dataAxis = chart.scroller && chart.scroller.xAxis ?
-                        chart.scroller.xAxis :
-                        chartAxis, dataMin = dataAxis.dataMin, dataMax = dataAxis.dataMax;
+                    const { maxInput, minInput } = rangeSelector, chartAxis = chart.xAxis[0], unionExtremes = (chart.scroller && chart.scroller.getUnionExtremes()) || chartAxis, dataMin = unionExtremes.dataMin, dataMax = unionExtremes.dataMax;
                     let value = rangeSelector.getInputValue(name);
                     if (value !== Number(input.getAttribute('data-hc-time-previous')) &&
                         isNumber(value)) {
@@ -6141,7 +6137,7 @@
         const { noop } = H;
         const { parse: color } = Color;
         const { series: { prototype: seriesProto }, seriesTypes: { column: ColumnSeries } } = SeriesRegistry;
-        const { addEvent, clamp, defined, extend, find, isNumber, isObject, merge, pick } = U;
+        const { addEvent, clamp, defined, extend, find, isNumber, isObject, merge, pick, relativeLength } = U;
         /* *
          *
          *  Constants
@@ -6315,7 +6311,7 @@
              * @private
              */
             translatePoint(point) {
-                const xAxis = this.xAxis, yAxis = this.yAxis, metrics = this.columnMetrics, options = this.options, { borderRadius } = options, minPointLength = options.minPointLength || 0, oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2, seriesXOffset = this.pointXOffset = metrics.offset, posX = pick(point.x2, point.x + (point.len || 0));
+                const xAxis = this.xAxis, yAxis = this.yAxis, metrics = this.columnMetrics, options = this.options, minPointLength = options.minPointLength || 0, oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2, seriesXOffset = this.pointXOffset = metrics.offset, posX = pick(point.x2, point.x + (point.len || 0)), borderRadius = options.borderRadius;
                 let plotX = point.plotX, plotX2 = xAxis.translate(posX, 0, 0, 0, 1);
                 const length = Math.abs(plotX2 - plotX), inverted = this.chart.inverted, borderWidth = pick(options.borderWidth, 1), crisper = borderWidth % 2 / 2;
                 let widthDifference, partialFill, yOffset = metrics.offset, pointHeight = Math.round(metrics.width), dlLeft, dlRight, dlWidth, clipRectWidth;
@@ -6340,18 +6336,18 @@
                     yAxis.categories) {
                     point.plotY = yAxis.translate(point.y, 0, 1, 0, 1, options.pointPlacement);
                 }
-                const x = Math.floor(Math.min(plotX, plotX2)) + crisper;
-                const x2 = Math.floor(Math.max(plotX, plotX2)) + crisper;
+                const x = Math.floor(Math.min(plotX, plotX2)) + crisper, x2 = Math.floor(Math.max(plotX, plotX2)) + crisper, width = x2 - x;
+                const r = Math.min(relativeLength((typeof borderRadius === 'object' ?
+                    borderRadius.radius :
+                    borderRadius || 0), pointHeight), Math.min(width, pointHeight) / 2);
                 const shapeArgs = {
                     x,
                     y: Math.floor(point.plotY + yOffset) + crisper,
-                    width: x2 - x,
-                    height: pointHeight
+                    width,
+                    height: pointHeight,
+                    r
                 };
                 point.shapeArgs = shapeArgs;
-                if (isNumber(borderRadius)) {
-                    point.shapeArgs.r = borderRadius;
-                }
                 // Move tooltip to default position
                 if (!inverted) {
                     point.tooltipPos[0] -= oldColWidth +
@@ -6405,11 +6401,7 @@
                     if (!isNumber(partialFill)) {
                         partialFill = 0;
                     }
-                    if (isNumber(borderRadius)) {
-                        point.partShapeArgs = merge(shapeArgs, {
-                            r: borderRadius
-                        });
-                    }
+                    point.partShapeArgs = merge(shapeArgs);
                     clipRectWidth = Math.max(Math.round(length * partialFill + point.plotX -
                         plotX), 0);
                     point.clipRectArgs = {
@@ -8291,7 +8283,8 @@
          */
         /**
          * Set cell height for grid axis labels. By default this is calculated from font
-         * size. This option only applies to horizontal axes.
+         * size. This option only applies to horizontal axes. For vertical axes, check
+         * the [#yAxis.staticScale](yAxis.staticScale) option.
          *
          * @sample gantt/grid-axis/cellheight
          *         Gant chart with custom cell height
@@ -9855,6 +9848,12 @@
                  */
                 type: 'straight',
                 /**
+                 * The corner radius for this chart's Pathfinder connecting lines
+                 *
+                 * @since next
+                 */
+                radius: 0,
+                /**
                  * Set the default pixel width for this chart's Pathfinder connecting
                  * lines.
                  *
@@ -10551,7 +10550,137 @@
 
         return Connection;
     });
-    _registerModule(_modules, 'Gantt/PathfinderAlgorithms.js', [_modules['Core/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Series/PathUtilities.js', [], function () {
+        /* *
+         *
+         *  (c) 2010-2022 Pawel Lysy
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
+        const getLinkPath = {
+            'default': getDefaultPath,
+            straight: getStraightPath,
+            curved: getCurvedPath
+        };
+        function getDefaultPath(pathParams) {
+            const { x1, y1, x2, y2, width = 0, inverted = false, radius, parentVisible } = pathParams;
+            const path = [
+                ['M', x1, y1],
+                ['L', x1, y1],
+                ['C', x1, y1, x1, y2, x1, y2],
+                ['L', x1, y2],
+                ['C', x1, y1, x1, y2, x1, y2],
+                ['L', x1, y2]
+            ];
+            return parentVisible ?
+                applyRadius([
+                    ['M', x1, y1],
+                    ['L', x1 + width * (inverted ? -0.5 : 0.5), y1],
+                    ['L', x1 + width * (inverted ? -0.5 : 0.5), y2],
+                    ['L', x2, y2]
+                ], radius) :
+                path;
+        }
+        function getStraightPath(pathParams) {
+            const { x1, y1, x2, y2, width = 0, inverted = false, parentVisible } = pathParams;
+            return parentVisible ? [
+                ['M', x1, y1],
+                ['L', x1 + width * (inverted ? -1 : 1), y2],
+                ['L', x2, y2]
+            ] : [
+                ['M', x1, y1],
+                ['L', x1, y2],
+                ['L', x1, y2]
+            ];
+        }
+        function getCurvedPath(pathParams) {
+            const { x1, y1, x2, y2, offset = 0, width = 0, inverted = false, parentVisible } = pathParams;
+            return parentVisible ?
+                [
+                    ['M', x1, y1],
+                    [
+                        'C',
+                        x1 + offset,
+                        y1,
+                        x1 - offset + width * (inverted ? -1 : 1),
+                        y2,
+                        x1 + width * (inverted ? -1 : 1),
+                        y2
+                    ],
+                    ['L', x2, y2]
+                ] :
+                [
+                    ['M', x1, y1],
+                    ['C', x1, y1, x1, y2, x1, y2],
+                    ['L', x2, y2]
+                ];
+        }
+        /**
+         * General function to apply corner radius to a path
+         * @private
+         */
+        function applyRadius(path, r) {
+            const d = [];
+            for (let i = 0; i < path.length; i++) {
+                const x = path[i][1];
+                const y = path[i][2];
+                if (typeof x === 'number' && typeof y === 'number') {
+                    // moveTo
+                    if (i === 0) {
+                        d.push(['M', x, y]);
+                    }
+                    else if (i === path.length - 1) {
+                        d.push(['L', x, y]);
+                        // curveTo
+                    }
+                    else if (r) {
+                        const prevSeg = path[i - 1];
+                        const nextSeg = path[i + 1];
+                        if (prevSeg && nextSeg) {
+                            const x1 = prevSeg[1], y1 = prevSeg[2], x2 = nextSeg[1], y2 = nextSeg[2];
+                            // Only apply to breaks
+                            if (typeof x1 === 'number' &&
+                                typeof x2 === 'number' &&
+                                typeof y1 === 'number' &&
+                                typeof y2 === 'number' &&
+                                x1 !== x2 &&
+                                y1 !== y2) {
+                                const directionX = x1 < x2 ? 1 : -1, directionY = y1 < y2 ? 1 : -1;
+                                d.push([
+                                    'L',
+                                    x - directionX * Math.min(Math.abs(x - x1), r),
+                                    y - directionY * Math.min(Math.abs(y - y1), r)
+                                ], [
+                                    'C',
+                                    x,
+                                    y,
+                                    x,
+                                    y,
+                                    x + directionX * Math.min(Math.abs(x - x2), r),
+                                    y + directionY * Math.min(Math.abs(y - y2), r)
+                                ]);
+                            }
+                        }
+                        // lineTo
+                    }
+                    else {
+                        d.push(['L', x, y]);
+                    }
+                }
+            }
+            return d;
+        }
+        const PathUtilities = {
+            applyRadius,
+            getLinkPath
+        };
+
+        return PathUtilities;
+    });
+    _registerModule(_modules, 'Gantt/PathfinderAlgorithms.js', [_modules['Series/PathUtilities.js'], _modules['Core/Utilities.js']], function (PathUtilities, U) {
         /* *
          *
          *  (c) 2016 Highsoft AS
@@ -10829,8 +10958,9 @@
             });
             // Finally add the endSegment
             segments.push(endSegment);
+            const path = PathUtilities.applyRadius(pathFromSegments(segments), options.radius);
             return {
-                path: pathFromSegments(segments),
+                path,
                 obstacles: segments
             };
         };
@@ -11347,6 +11477,12 @@
                  * @since   6.2.0
                  */
                 type: 'straight',
+                /**
+                 * The corner radius for the connector line
+                 *
+                 * @since next
+                 */
+                radius: 0,
                 /**
                  * Set the default pixel width for this chart's Pathfinder connecting
                  * lines.
@@ -12182,6 +12318,7 @@
                 animation: {
                     reversed: true // Dependencies go from child to parent
                 },
+                radius: 0,
                 startMarker: {
                     enabled: true,
                     symbol: 'arrow-filled',
@@ -12215,7 +12352,7 @@
          * A `gantt` series.
          *
          * @extends   series,plotOptions.gantt
-         * @excluding boostThreshold, connectors, dashStyle, findNearestPointBy,
+         * @excluding boostThreshold, dashStyle, findNearestPointBy,
          *            getExtremesFromAll, marker, negativeColor, pointInterval,
          *            pointIntervalUnit, pointPlacement, pointStart
          * @product   gantt

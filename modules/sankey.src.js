@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Sankey diagram module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -533,8 +531,8 @@
                 inside: true
             },
             /**
-             * @ignore-option
-             *
+             * @default   true
+             * @extends   plotOptions.series.inactiveOtherPoints
              * @private
              */
             inactiveOtherPoints: true,
@@ -627,6 +625,18 @@
              * @private
              */
             minLinkWidth: 0,
+            /**
+             * Determines which side of the chart the nodes are to be aligned to. When
+             * the chart is inverted, `top` aligns to the left and `bottom` to the
+             * right.
+             *
+             * @sample highcharts/plotoptions/sankey-nodealignment
+             *         Node alignment demonstrated
+             *
+             * @type      {'top'|'center'|'bottom'}
+             * @apioption plotOptions.sankey.nodeAlignment
+             */
+            nodeAlignment: 'center',
             /**
              * The pixel width of each node in a sankey diagram or dependency wheel,
              * or the height in case the chart is inverted.
@@ -1015,7 +1025,8 @@
                         while (i--) {
                             if (column[i].getSum() * factor < minLinkWidth) {
                                 column.splice(i, 1);
-                                remainingHeight -= minLinkWidth;
+                                remainingHeight =
+                                    Math.max(0, remainingHeight - minLinkWidth);
                                 skipPoint = true;
                             }
                         }
@@ -1051,7 +1062,12 @@
                         height += nodeHeight;
                         return height;
                     }, 0);
-                    return ((series.chart.plotSizeY || 0) - height) / 2;
+                    // Node alignment option handling #19096
+                    return {
+                        top: 0,
+                        center: 0.5,
+                        bottom: 1
+                    }[series.options.nodeAlignment || 'center'] * ((series.chart.plotSizeY || 0) - height);
                 }
                 /**
                  * Get the left position of the column in pixels

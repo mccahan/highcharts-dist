@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Highcharts variwide module
 
@@ -16,5 +16,4 @@ b);(this.xAxis.reversed?this.zData.slice().reverse():this.zData).forEach(functio
 g-(this.chart.plotTop-p*d.minPixelPadding):e-this.chart.plotLeft-p*d.minPixelPadding;e=a/b.length*l;g=(a+p)/b.length*l;const h=m(b[a],k)/k*l;b=m(b[a+p],k)/k*l;f&&(f.crosshairWidth=b-h);return d+h+(c-(d+e))*(b-h)/(g-e)}translate(){this.crispOption=this.options.crisp;this.options.crisp=!1;super.translate();this.options.crisp=this.crispOption}correctStackLabels(){const a=this.options,c=this.yAxis;var f;let d,e;for(const b of this.points)e=b.x,d=b.shapeArgs.width,(f=c.stacking.stacks[(this.negStacks&&
 b.y<(a.startFromThreshold?0:a.threshold)?"-":"")+this.stackKey])&&(f=f[e])&&!b.isNull&&f.setOffset(-(d/2)||0,d||0,void 0,void 0,b.plotX,this.xAxis)}}c.compose=f.compose;c.defaultOptions=r(e.defaultOptions,{pointPadding:0,groupPadding:0});g(c,"afterColumnTranslate",function(){const a=this.xAxis,c=this.chart.inverted,f=this.borderWidth%2/2;this.points.forEach((d,b)=>{const e=d.shapeArgs||{},{x:g=0,width:h=0}=e,{plotX:l=0,tooltipPos:k,z:m=0}=d;let n;a.variwide?(n=this.postTranslate(b,g,d),b=this.postTranslate(b,
 g+h)):(n=l,b=a.translate(d.x+m,!1,!1,!1,!0));this.crispOption&&(n=Math.round(n)-f,b=Math.round(b)-f);e.x=n;e.width=Math.max(b-n,1);d.plotX=(n+b)/2;k&&(c?k[1]=a.len-e.x-e.width/2:k[0]=e.x+e.width/2)});this.options.stacking&&this.correctStackLabels()},{order:2});h(c.prototype,{irregularWidths:!0,pointArrayMap:["y","z"],parallelArrays:["x","y","z"],pointClass:q});a.registerSeriesType("variwide",c);"";return c});f(a,"masters/modules/variwide.src.js",[a["Core/Globals.js"],a["Series/Variwide/VariwideSeries.js"]],
-function(a,e){e.compose(a.Axis,a.Tick)})});
-//# sourceMappingURL=variwide.js.map
+function(a,e){e.compose(a.Axis,a.Tick)})});//# sourceMappingURL=variwide.js.map

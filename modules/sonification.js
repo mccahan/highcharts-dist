@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Sonification module
 
@@ -112,5 +112,4 @@ this.boundaryInstrument.connect(this.audioDestination))}defaultBoundaryHit(){thi
 this.updateSonificationEnabled()}function h(a){if(a=a.options.sonification)w(!0,this.options.sonification,a),g.call(this)}const k=[];b.compose=function(b,m,l){-1===k.indexOf(b)&&(k.push(b),e(b.prototype,{updateSonificationEnabled:d,sonify:function(a){this.sonification&&this.sonification.sonifyChart(!1,a)},toggleSonify:function(a=!0,b){if(this.sonification){var c=this.sonification.timeline;K.speechSynthesis&&K.speechSynthesis.cancel();c&&this.sonification.isPlaying()?a?this.sonification.cancel():c.pause():
 c&&c.isPaused?c.resume():this.sonification.sonifyChart(a,b)}}}),c(b,"destroy",f),c(b,"render",g),c(b,"update",h));-1===k.indexOf(m)&&(k.push(m),m.prototype.sonify=function(a){this.chart.sonification&&this.chart.sonification.sonifySeries(this,!1,a)});-1===k.indexOf(l)&&(k.push(l),l.prototype.sonify=function(a){this.series.chart.sonification&&this.series.chart.sonification.sonifyPoint(this,a)});(b=a().exporting)&&b.buttons&&b.buttons.contextButton.menuItems&&b.buttons.contextButton.menuItems.push("separator",
 "downloadMIDI","playAsSound")}})(F||(F={}));w(!0,t,l);"";return F});v(b,"Extensions/Sonification/Scales.js",[],function(){"";return{minor:[0,2,3,5,7,8,10],dorian:[0,2,3,5,7,9,10],harmonicMinor:[0,2,3,5,7,8,11],phrygian:[0,1,3,5,7,8,11],major:[0,2,4,5,7,9,11],lydian:[0,2,4,6,7,9,11],mixolydian:[0,2,4,5,7,9,10],majorPentatonic:[0,2,4,7,9],minorPentatonic:[0,3,5,7,10]}});v(b,"masters/modules/sonification.src.js",[b["Core/Globals.js"],b["Extensions/Sonification/Sonification.js"],b["Extensions/Sonification/SynthPatch.js"],
-b["Extensions/Sonification/InstrumentPresets.js"],b["Extensions/Sonification/Scales.js"],b["Extensions/Sonification/SonificationInstrument.js"],b["Extensions/Sonification/SonificationSpeaker.js"],b["Extensions/Sonification/SonificationTimeline.js"]],function(b,r,h,l,v,n,d,A){b.sonification={InstrumentPresets:l,Scales:v,SynthPatch:h,SonificationInstrument:n,SonificationSpeaker:d,SonificationTimeline:A,Sonification:r};r.compose(b.Chart,b.Series,b.Point)})});
-//# sourceMappingURL=sonification.js.map
+b["Extensions/Sonification/InstrumentPresets.js"],b["Extensions/Sonification/Scales.js"],b["Extensions/Sonification/SonificationInstrument.js"],b["Extensions/Sonification/SonificationSpeaker.js"],b["Extensions/Sonification/SonificationTimeline.js"]],function(b,r,h,l,v,n,d,A){b.sonification={InstrumentPresets:l,Scales:v,SynthPatch:h,SonificationInstrument:n,SonificationSpeaker:d,SonificationTimeline:A,Sonification:r};r.compose(b.Chart,b.Series,b.Point)})});//# sourceMappingURL=sonification.js.map

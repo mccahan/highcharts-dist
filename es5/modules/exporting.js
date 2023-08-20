@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Exporting module
 
@@ -44,5 +44,4 @@ this;a.isPrinting||(H=a,b.isSafari||a.beforePrint(),setTimeout(function(){B.focu
 b){var c=a.indexOf("</svg>")+6,e=a.substr(c);a=a.substr(0,c);b&&b.exporting&&b.exporting.allowHTML&&e&&(e='<foreignObject x="0" y="0" width="'+b.chart.width+'" height="'+b.chart.height+'"><body xmlns="http://www.w3.org/1999/xhtml">'+e.replace(/(<(?:img|br).*?(?=>))>/g,"$1 />")+"</body></foreignObject>",a=a.replace("</svg>",e+"</svg>"));return a=a.replace(/zIndex="[^"]+"/g,"").replace(/symbolName="[^"]+"/g,"").replace(/jQuery[0-9]+="[^"]+"/g,"").replace(/url\(("|&quot;)(.*?)("|&quot;);?\)/g,"url($2)").replace(/url\([^#]+#/g,
 "url(#").replace(/<svg /,'<svg xmlns:xlink="http://www.w3.org/1999/xlink" ').replace(/ (|NS[0-9]+:)href=/g," xlink:href=").replace(/\n/," ").replace(/(fill|stroke)="rgba\(([ 0-9]+,[ 0-9]+,[ 0-9]+),([ 0-9\.]+)\)"/g,'$1="rgb($2)" $1-opacity="$3"').replace(/&nbsp;/g,"\u00a0").replace(/&shy;/g,"\u00ad")}var O=[],ha=[/-/,/^(clipPath|cssText|d|height|width)$/,/^font$/,/[lL]ogical(Width|Height)$/,/^parentRule$/,/perspective/,/TapHighlightColor/,/^transition/,/^length$/,/^[0-9]+$/],N="fill stroke strokeLinecap strokeLinejoin strokeWidth textAnchor x y".split(" ");
 m.inlineAllowlist=[];var fa=["clipPath","defs","desc"],H;m.compose=function(a,d){C.compose(d);z.compose(a);f.pushUnique(O,a)&&(d=a.prototype,d.afterPrint=w,d.exportChart=Y,d.inlineStyles=ea,d.print=ka,d.sanitizeSVG=ma,d.getChartHTML=Z,d.getSVG=ba,d.getSVGForExport=ca,d.getFilename=aa,d.moveContainers=ia,d.beforePrint=G,d.contextMenu=W,d.addButton=l,d.destroyExport=X,d.renderExporting=la,d.callbacks.push(V),A(a,"init",ja),b.isSafari&&b.win.matchMedia("print").addListener(function(a){H&&(a.matches?
-H.beforePrint():H.afterPrint())}));f.pushUnique(O,I)&&(e.exporting=r(q.exporting,e.exporting),e.lang=r(q.lang,e.lang),e.navigation=r(q.navigation,e.navigation))}})(G||(G={}));"";"";return G});n(a,"masters/modules/exporting.src.js",[a["Core/Globals.js"],a["Extensions/Exporting/Exporting.js"],a["Core/HttpUtilities.js"]],function(a,m,n){a.HttpUtilities=n;a.ajax=n.ajax;a.getJSON=n.getJSON;a.post=n.post;m.compose(a.Chart,a.Renderer)})});
-//# sourceMappingURL=exporting.js.map
+H.beforePrint():H.afterPrint())}));f.pushUnique(O,I)&&(e.exporting=r(q.exporting,e.exporting),e.lang=r(q.lang,e.lang),e.navigation=r(q.navigation,e.navigation))}})(G||(G={}));"";"";return G});n(a,"masters/modules/exporting.src.js",[a["Core/Globals.js"],a["Extensions/Exporting/Exporting.js"],a["Core/HttpUtilities.js"]],function(a,m,n){a.HttpUtilities=n;a.ajax=n.ajax;a.getJSON=n.getJSON;a.post=n.post;m.compose(a.Chart,a.Renderer)})});//# sourceMappingURL=exporting.js.map

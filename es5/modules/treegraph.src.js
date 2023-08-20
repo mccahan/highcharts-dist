@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  * Treegraph chart series type
  *
  *  (c) 2010-2022 Pawel Lysy Grzegorz Blachlinski
@@ -27,12 +27,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -1372,7 +1370,6 @@
         var symbols = SVGRenderer.prototype.symbols;
         var getLevelOptions = TU.getLevelOptions;
         var extend = U.extend,
-            isArray = U.isArray,
             merge = U.merge,
             pick = U.pick,
             relativeLength = U.relativeLength,
@@ -1812,8 +1809,16 @@
                         y - height / 2),
                     borderRadius = pick(point.options.borderRadius,
                     level.borderRadius,
-                    this.options.borderRadius);
-                point.shapeType = 'path';
+                    this.options.borderRadius),
+                    symbolFn = symbols[symbol || 'circle'];
+                if (symbolFn === void 0) {
+                    point.hasImage = true;
+                    point.shapeType = 'image';
+                    point.imageUrl = symbol.match(/^url\((.*?)\)$/)[1];
+                }
+                else {
+                    point.shapeType = 'path';
+                }
                 if (!point.visible && point.linkToParent) {
                     var parentNode = point.linkToParent.fromNode;
                     if (parentNode) {
@@ -1829,11 +1834,12 @@
                         if (!point.shapeArgs) {
                             point.shapeArgs = {};
                         }
-                        extend(point.shapeArgs, {
-                            d: symbols[symbol || 'circle'](x_1, y_1, width_1, height_1, borderRadius ? { r: borderRadius } : void 0),
-                            x: x_1,
-                            y: y_1
-                        });
+                        if (!point.hasImage) {
+                            extend(point.shapeArgs, {
+                                d: symbolFn(x_1, y_1, width_1, height_1, borderRadius ? { r: borderRadius } : void 0)
+                            });
+                        }
+                        extend(point.shapeArgs, { x: x_1, y: y_1 });
                         point.plotX = parentNode.plotX;
                         point.plotY = parentNode.plotY;
                     }
@@ -1842,13 +1848,15 @@
                     point.plotX = nodeX;
                     point.plotY = nodeY;
                     point.shapeArgs = {
-                        d: symbols[symbol || 'circle'](nodeX, nodeY, width, height, borderRadius ? { r: borderRadius } : void 0),
                         x: nodeX,
                         y: nodeY,
                         width: width,
                         height: height,
                         cursor: !point.node.isLeaf ? 'pointer' : 'default'
                     };
+                    if (!point.hasImage) {
+                        point.shapeArgs.d = symbolFn(nodeX, nodeY, width, height, borderRadius ? { r: borderRadius } : void 0);
+                    }
                 }
                 // Set the anchor position for tooltip.
                 point.tooltipPos = chart.inverted ?
@@ -1904,6 +1912,7 @@
          * @sample highcharts/series-treegraph/level-options
          *          Treegraph chart with level options applied
          *
+         * @type      {Array<*>}
          * @excluding layoutStartingDirection, layoutAlgorithm
          * @apioption series.treegraph.levels
          */
@@ -1911,6 +1920,11 @@
          * Set collapsed status for nodes level-wise.
          * @type {boolean}
          * @apioption series.treegraph.levels.collapsed
+         */
+        /**
+         * Set marker options for nodes at the level.
+         * @extends   series.treegraph.marker
+         * @apioption series.treegraph.levels.marker
          */
         /**
          * An array of data points for the series. For the `treegraph` series type,

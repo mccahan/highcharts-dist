@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -16,5 +16,4 @@ null!==d&&(c[a[g]]=this.yAxis.toPixels(d,!0))})})}const v=[],B=["bottomLine"],w=
 a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,g,h){const {sma:e}=g.seriesTypes,{extend:p,isArray:u,merge:f}=h;class k extends e{constructor(){super(...arguments);this.points=this.options=this.data=void 0}init(){g.seriesTypes.sma.prototype.init.apply(this,arguments);this.options=f({topLine:{styles:{lineColor:this.color}},bottomLine:{styles:{lineColor:this.color}}},this.options)}getValues(a,f){const e=f.period,h=f.standardDeviation,k=[],p=[],v=a.xData,r=(a=a.yData)?a.length:
 0,w=[];let m;if(!(v.length<e)){var b=u(a[0]);for(m=e;m<=r;m++){var c=v.slice(m-e,m);var d=a.slice(m-e,m);var n=g.seriesTypes.sma.prototype.getValues.call(this,{xData:c,yData:d},f);c=n.xData[0];n=n.yData[0];{const a=d.length;let c=0,e=0;for(;c<a;c++){var l=(b?d[c][f.index]:d[c])-n;e+=l*l}l=Math.sqrt(e/(a-1))}d=n+h*l;l=n-h*l;w.push([c,d,n,l]);k.push(c);p.push([d,n,l])}return{values:w,xData:k,yData:p}}}}k.defaultOptions=f(e.defaultOptions,{params:{period:20,standardDeviation:2,index:3},bottomLine:{styles:{lineWidth:1,
 lineColor:void 0}},topLine:{styles:{lineWidth:1,lineColor:void 0}},tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span><b> {series.name}</b><br/>Top: {point.top}<br/>Middle: {point.middle}<br/>Bottom: {point.bottom}<br/>'},marker:{enabled:!1},dataGrouping:{approximation:"averages"}});p(k.prototype,{areaLinesNames:["top","bottom"],linesApiNames:["topLine","bottomLine"],nameComponents:["period","standardDeviation"],pointArrayMap:["top","middle","bottom"],pointValKey:"middle"});a.compose(k);
-g.registerSeriesType("bb",k);"";return k});e(a,"masters/indicators/bollinger-bands.src.js",[],function(){})});
-//# sourceMappingURL=bollinger-bands.js.map
+g.registerSeriesType("bb",k);"";return k});e(a,"masters/indicators/bollinger-bands.src.js",[],function(){})});//# sourceMappingURL=bollinger-bands.js.map

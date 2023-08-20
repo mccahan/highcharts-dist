@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Torstein Honsi
 
@@ -16,5 +16,4 @@ function(b,c){return l(c,function(c){return c.from<b&&b<c.to})};c.prototype.isIn
 !0});d||a.val2lin!==c.val2Lin||(delete a.val2lin,delete a.lin2val);d&&(a.userOptions.ordinal=!1,a.lin2val=c.lin2Val,a.val2lin=c.val2Lin,a.setExtremes=function(b,c,d,f,g){if(e.hasBreaks){for(var h=this.options.breaks||[],k;k=e.findBreakAt(b,h);)b=k.to;for(;k=e.findBreakAt(c,h);)c=k.from;c<b&&(c=b)}a.constructor.prototype.setExtremes.call(this,b,c,d,f,g)},a.setAxisTranslation=function(){a.constructor.prototype.setAxisTranslation.call(this);e.unitLength=void 0;if(e.hasBreaks){var b=a.options.breaks||
 [],d=[],f=[],g=u(a.pointRangePadding,0),h=0,r,p=a.userMin||a.min,t=a.userMax||a.max,l;b.forEach(function(a){r=a.repeat||Infinity;m(p)&&m(t)&&(c.isInBreak(a,p)&&(p+=a.to%r-p%r),c.isInBreak(a,t)&&(t-=t%r-a.from%r))});b.forEach(function(a){q=a.from;r=a.repeat||Infinity;if(m(p)&&m(t)){for(;q-r>p;)q-=r;for(;q<p;)q+=r;for(l=q;l<t;l+=r)d.push({value:l,move:"in"}),d.push({value:l+a.to-a.from,move:"out",size:a.breakSize})}});d.sort(function(a,b){return a.value===b.value?("in"===a.move?0:1)-("in"===b.move?
 0:1):a.value-b.value});var n=0;var q=p;d.forEach(function(a){n+="in"===a.move?1:-1;1===n&&"in"===a.move&&(q=a.value);0===n&&m(q)&&(f.push({from:q,to:a.value,len:a.value-q-(a.size||0)}),h+=a.value-q-(a.size||0))});e.breakArray=f;m(p)&&m(t)&&m(a.min)&&(e.unitLength=t-p-h+g,w(a,"afterBreaks"),a.staticScale?a.transA=a.staticScale:e.unitLength&&(a.transA*=(t-a.min+g)/e.unitLength),g&&(a.minPixelPadding=a.transA*(a.minPointOffset||0)),a.min=p,a.max=t)}});u(f,!0)&&a.chart.redraw()};return c}();v.Additions=
-x})(v||(v={}));return v});l(f,"masters/modules/broken-axis.src.js",[f["Core/Globals.js"],f["Core/Axis/BrokenAxis.js"]],function(f,h){h.compose(f.Axis,f.Series)})});
-//# sourceMappingURL=broken-axis.js.map
+x})(v||(v={}));return v});l(f,"masters/modules/broken-axis.src.js",[f["Core/Globals.js"],f["Core/Axis/BrokenAxis.js"]],function(f,h){h.compose(f.Axis,f.Series)})});//# sourceMappingURL=broken-axis.js.map

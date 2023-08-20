@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
  Organization chart series type
 
  (c) 2019-2021 Torstein Honsi
@@ -22,5 +22,4 @@ let a=c.toNode,d=n(this.options.linkLineWidth,this.options.link.lineWidth),e=Mat
 parseInt(g,10),t=this.chart.inverted;t&&(m-=b.shapeArgs.width||0,p+=a.shapeArgs.width||0);g=this.colDistance?Math.floor(p+(t?1:-1)*(this.colDistance-this.nodeWidth)/2)+e:Math.floor((p+m)/2)+e;u&&(50<=u||-50>=u)&&(g=p=Math.floor(p+(t?-.5:.5)*(a.shapeArgs.width||0))+e,r=a.shapeArgs.y||0,0<u&&(r+=a.shapeArgs.height||0));a.hangsFrom===b&&(this.chart.inverted?(k=Math.floor((b.shapeArgs.y||0)+(b.shapeArgs.height||0)-q/2)+e,r=(a.shapeArgs.y||0)+(a.shapeArgs.height||0)):k=Math.floor((b.shapeArgs.y||0)+q/
 2)+e,g=p=Math.floor((a.shapeArgs.x||0)+(a.shapeArgs.width||0)/2)+e);c.plotX=g;c.plotY=(k+r)/2;c.shapeType="path";"straight"===h?c.shapeArgs={d:[["M",m,k],["L",p,r]]}:"curved"===h?(b=Math.abs(p-m)*l*(t?-1:1),c.shapeArgs={d:[["M",m,k],["C",m+b,k,p-b,r,p,r]]}):c.shapeArgs={d:f.applyRadius([["M",m,k],["L",g,k],["L",g,r],["L",p,r]],n(this.options.linkRadius,this.options.link.radius))};c.dlBox={x:(m+p)/2,y:(k+r)/2,height:d,width:0}}}translateNode(b,a){c.prototype.translateNode.call(this,b,a);a=b.hangsFrom;
 let d=this.options.hangingIndent||0,f=this.chart.inverted?-1:1,e=b.shapeArgs,g=this.options.hangingIndentTranslation,h=this.options.minNodeLength||10;if(a)if("cumulative"===g)for(e.height-=d,e.y-=f*d;a;)e.y+=f*d,a=a.hangsFrom;else if("shrink"===g)for(;a&&e.height>d+h;)e.height-=d,a=a.hangsFrom;else e.height-=d,this.chart.inverted||(e.y+=d);b.nodeHeight=this.chart.inverted?e.width:e.height}drawDataLabels(){const a=this.options.dataLabels;if(a.linkTextPath&&a.linkTextPath.enabled)for(const a of this.points)a.options.dataLabels=
-q(a.options.dataLabels,{useHTML:!1});super.drawDataLabels()}}t.defaultOptions=q(c.defaultOptions,a);h(t.prototype,{pointClass:d});b.registerSeriesType("organization",t);"";return t});n(d,"masters/modules/organization.src.js",[],function(){})});
-//# sourceMappingURL=organization.js.map
+q(a.options.dataLabels,{useHTML:!1});super.drawDataLabels()}}t.defaultOptions=q(c.defaultOptions,a);h(t.prototype,{pointClass:d});b.registerSeriesType("organization",t);"";return t});n(d,"masters/modules/organization.src.js",[],function(){})});//# sourceMappingURL=organization.js.map

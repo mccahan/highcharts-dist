@@ -543,7 +543,7 @@ class Chart {
                     redrawLegend = true;
                 }
                 else if (legendUserOptions &&
-                    (legendUserOptions.labelFormatter ||
+                    (!!legendUserOptions.labelFormatter ||
                         legendUserOptions.labelFormat)) {
                     redrawLegend = true; // #2165
                 }
@@ -1204,13 +1204,12 @@ class Chart {
      *        internally as a response to window resize.
      */
     reflow(e) {
-        const chart = this, optionsChart = chart.options.chart, hasUserSize = (defined(optionsChart.width) &&
-            defined(optionsChart.height)), oldBox = chart.containerBox, containerBox = chart.getContainerBox();
+        const chart = this, oldBox = chart.containerBox, containerBox = chart.getContainerBox();
         delete chart.pointer.chartPosition;
         // Width and height checks for display:none. Target is doc in Opera
         // and win in Firefox, Chrome and IE9.
-        if (!hasUserSize &&
-            !chart.isPrinting &&
+        if (!chart.isPrinting &&
+            !chart.isResizing &&
             oldBox &&
             // When fired by resize observer inside hidden container
             containerBox.width) {
@@ -1326,10 +1325,11 @@ class Chart {
         chart.oldChartHeight = null;
         fireEvent(chart, 'resize');
         // Fire endResize and set isResizing back. If animation is disabled,
-        // fire without delay
-        syncTimeout(function () {
+        // fire without delay, but in a new thread to avoid triggering the
+        // resize observer (#19027).
+        setTimeout(() => {
             if (chart) {
-                fireEvent(chart, 'endResize', null, function () {
+                fireEvent(chart, 'endResize', void 0, () => {
                     chart.isResizing -= 1;
                 });
             }

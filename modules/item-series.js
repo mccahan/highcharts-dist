@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Item series type for Highcharts
 
@@ -15,5 +15,4 @@ for(let b=0;b<(d.y||0);b++){if(a.center&&a.slots){var e=a.slots.shift();var g=e.
 k[d];if(!t)break;t.isActive?t.isActive=!1:(t.destroy(),k.splice(d,1),d--)}})}getRows(){let a=this.options.rows,b,h;if(!a)if(h=this.chart.plotWidth/this.chart.plotHeight,a=Math.sqrt(this.total),1<h)for(a=Math.ceil(a);0<a;){b=this.total/a;if(b/a>h)break;a--}else for(a=Math.floor(a);a<this.total;){b=this.total/a;if(b/a<h)break;a++}return a}getSlots(){function a(a){0<D&&(a.row.colCount--,D--)}let b=this.center,h=b[2],c=b[3],f,p=this.slots,m,z,v,w,x,d,q,k,y=0,l,r=this.endAngleRad-this.startAngleRad,u=
 Number.MAX_VALUE,A,n,e,g=this.options.rows,B=(h-c)/h,C=0===r%(2*Math.PI),E=this.total||0;for(;u>E+(n&&C?n.length:0);)for(A=u,u=p.length=0,n=e,e=[],y++,l=h/y/2,g?(c=(l-g)/l*h,0<=c?l=g:(c=0,B=1)):l=Math.floor(l*B),f=l;0<f;f--)v=(c+f/l*(h-c-y))/2,w=r*v,x=Math.ceil(w/y),e.push({rowRadius:v,rowLength:w,colCount:x}),u+=x+1;if(n){for(var D=A-this.total-(C?n.length:0);0<D;)n.map(function(a){return{angle:a.colCount/a.rowLength,row:a}}).sort(function(a,b){return b.angle-a.angle}).slice(0,Math.min(D,Math.ceil(n.length/
 2))).forEach(a);n.forEach(function(a){const c=a.rowRadius;d=(a=a.colCount)?r/a:0;for(k=0;k<=a;k+=1)q=this.startAngleRad+k*d,m=b[0]+Math.cos(q)*c,z=b[1]+Math.sin(q)*c,p.push({x:m,y:z,angle:q})},this);p.sort(function(a,b){return a.angle-b.angle});this.itemSize=y;return p}}translate(b){0===this.total&&r(this.options.startAngle)&&r(this.options.endAngle)&&(this.center=this.getCenter());this.slots||(this.slots=[]);r(this.options.startAngle)&&r(this.options.endAngle)?(a.seriesTypes.pie.prototype.translate.apply(this,
-arguments),this.slots=this.getSlots()):(this.generatePoints(),H(this,"afterTranslate"))}}m.defaultOptions=C(c.defaultOptions,{endAngle:void 0,innerSize:"40%",itemPadding:.1,layout:"vertical",marker:C(f.plotOptions.line.marker,{radius:null}),rows:void 0,crisp:!1,showInLegend:!0,startAngle:void 0});B(m.prototype,{markerAttribs:void 0});m.prototype.pointClass=b;A.registerSeriesType("item",m);"";return m});b(a,"masters/modules/item-series.src.js",[],function(){})});
-//# sourceMappingURL=item-series.js.map
+arguments),this.slots=this.getSlots()):(this.generatePoints(),H(this,"afterTranslate"))}}m.defaultOptions=C(c.defaultOptions,{endAngle:void 0,innerSize:"40%",itemPadding:.1,layout:"vertical",marker:C(f.plotOptions.line.marker,{radius:null}),rows:void 0,crisp:!1,showInLegend:!0,startAngle:void 0});B(m.prototype,{markerAttribs:void 0});m.prototype.pointClass=b;A.registerSeriesType("item",m);"";return m});b(a,"masters/modules/item-series.src.js",[],function(){})});//# sourceMappingURL=item-series.js.map

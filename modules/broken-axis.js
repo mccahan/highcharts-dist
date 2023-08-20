@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Torstein Honsi
 
@@ -16,5 +16,4 @@ a&&a<d.to})}isInAnyBreak(a,c){const d=this.axis,b=d.options.breaks||[];let e=b.l
 !1,b.lin2val=r.lin2Val,b.val2lin=r.val2Lin,b.setExtremes=function(a,c,e,k,g){if(d.hasBreaks){const b=this.options.breaks||[];let e;for(;e=d.findBreakAt(a,b);)a=e.to;for(;e=d.findBreakAt(c,b);)c=e.from;c<a&&(c=a)}b.constructor.prototype.setExtremes.call(this,a,c,e,k,g)},b.setAxisTranslation=function(){b.constructor.prototype.setAxisTranslation.call(this);d.unitLength=void 0;if(d.hasBreaks){const a=b.options.breaks||[],c=[],e=[],g=v(b.pointRangePadding,0);let n=0,h,t,q=b.userMin||b.min,u=b.userMax||
 b.max,m,l;a.forEach(function(a){t=a.repeat||Infinity;k(q)&&k(u)&&(r.isInBreak(a,q)&&(q+=a.to%t-q%t),r.isInBreak(a,u)&&(u-=u%t-a.from%t))});a.forEach(function(a){m=a.from;t=a.repeat||Infinity;if(k(q)&&k(u)){for(;m-t>q;)m-=t;for(;m<q;)m+=t;for(l=m;l<u;l+=t)c.push({value:l,move:"in"}),c.push({value:l+a.to-a.from,move:"out",size:a.breakSize})}});c.sort(function(a,b){return a.value===b.value?("in"===a.move?0:1)-("in"===b.move?0:1):a.value-b.value});h=0;m=q;c.forEach(function(a){h+="in"===a.move?1:-1;1===
 h&&"in"===a.move&&(m=a.value);0===h&&k(m)&&(e.push({from:m,to:a.value,len:a.value-m-(a.size||0)}),n+=a.value-m-(a.size||0))});d.breakArray=e;k(q)&&k(u)&&k(b.min)&&(d.unitLength=u-q-n+g,y(b,"afterBreaks"),b.staticScale?b.transA=b.staticScale:d.unitLength&&(b.transA*=(u-b.min+g)/d.unitLength),g&&(b.minPixelPadding=b.transA*(b.minPointOffset||0)),b.min=q,b.max=u)}});v(c,!0)&&b.chart.redraw()}}w.Additions=r})(w||(w={}));return w});h(e,"masters/modules/broken-axis.src.js",[e["Core/Globals.js"],e["Core/Axis/BrokenAxis.js"]],
-function(e,h){h.compose(e.Axis,e.Series)})});
-//# sourceMappingURL=broken-axis.js.map
+function(e,h){h.compose(e.Axis,e.Series)})});//# sourceMappingURL=broken-axis.js.map

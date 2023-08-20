@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -16,5 +16,4 @@ null!==d&&(c[a[e]]=this.yAxis.toPixels(d,!0))})})}const B=[],u=["bottomLine"],v=
 a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,g,l){const {sma:f}=g.seriesTypes,{extend:m,isArray:r,merge:h}=l;class e extends f{constructor(){super(...arguments);this.points=this.options=this.data=void 0}init(){super.init.apply(this,arguments);this.options=h({topLine:{styles:{lineColor:this.color}},bottomLine:{styles:{lineColor:this.color}}},this.options)}getValues(a,e){const f=e.period,g=e.topBand,l=e.bottomBand,h=a.xData,m=(a=a.yData)?a.length:0,u=[],v=[],w=[];let b,c;let d;
 if(!(h.length<f)&&r(a[0])&&4===a[0].length){for(d=f;d<=m;d++){var t=h.slice(d-f,d);var k=a.slice(d-f,d);k=super.getValues({xData:t,yData:k},e);t=k.xData[0];k=k.yData[0];b=k*(1+g);c=k*(1-l);u.push([t,b,k,c]);v.push(t);w.push([b,k,c])}return{values:u,xData:v,yData:w}}}}e.defaultOptions=h(f.defaultOptions,{marker:{enabled:!1},tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span><b> {series.name}</b><br/>Top: {point.top}<br/>Middle: {point.middle}<br/>Bottom: {point.bottom}<br/>'},params:{period:20,
 topBand:.1,bottomBand:.1},bottomLine:{styles:{lineWidth:1,lineColor:void 0}},topLine:{styles:{lineWidth:1}},dataGrouping:{approximation:"averages"}});m(e.prototype,{areaLinesNames:["top","bottom"],linesApiNames:["topLine","bottomLine"],nameComponents:["period","topBand","bottomBand"],nameBase:"Price envelopes",pointArrayMap:["top","middle","bottom"],parallelArrays:["x","y","top","bottom"],pointValKey:"middle"});a.compose(e);g.registerSeriesType("priceenvelopes",e);"";return e});f(a,"masters/indicators/price-envelopes.src.js",
-[],function(){})});
-//# sourceMappingURL=price-envelopes.js.map
+[],function(){})});//# sourceMappingURL=price-envelopes.js.map

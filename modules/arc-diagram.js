@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Arc diagram module
 
@@ -19,5 +19,4 @@ b){var c=this.translationFactor;const d=this.chart,g=this.options;var l=Math.min
 const f=k.radius;b=parseInt(g.offset,10)*((d.inverted?d.plotWidth:d.plotHeight)-(Math.floor(this.colDistance*(a.column||0)+(k.lineWidth||0)/2)+m+(b.sankeyColumn.scale||0)*(b.sankeyColumn.maxRadius||0)/2))/100;(a.sum=e)?(a.nodeX=c,a.nodeY=b,e=a.options.width||g.width||l,l=a.options.height||g.height||l,m=b,g.reversed&&(m=(d.plotSizeY||0)-b,d.inverted&&(m=(d.plotSizeY||0)-b)),this.mapOptionsToLevel&&(a.dlOptions=u.getDLOptions({level:this.mapOptionsToLevel[a.level],optionsPoint:a.options})),a.plotX=
 1,a.plotY=1,a.tooltipPos=d.inverted?[(d.plotSizeY||0)-m-l/2,(d.plotSizeX||0)-c-e/2]:[c+e/2,m+l/2],a.shapeType="path",a.shapeArgs={d:A[h||"circle"](c,m-(f||l)/2,f||e,f||l),width:f||e,height:f||l},a.dlBox={x:c+e/2,y:m,height:0,width:0}):a.dlOptions={enabled:!1}}drawDataLabels(){if(this.options.dataLabels){const a=this.options.dataLabels.textPath;w.prototype.drawDataLabels.call(this,this.nodes);this.options.dataLabels.textPath=this.options.dataLabels.linkTextPath;w.prototype.drawDataLabels.call(this,
 this.data);this.options.dataLabels.textPath=a}}pointAttribs(a,b){if(a&&a.isNode){const a=q.prototype.pointAttribs.apply(this,arguments);return z(a,["opacity"])}return super.pointAttribs.apply(this,arguments)}markerAttribs(a){return a.isNode?super.markerAttribs.apply(this,arguments):{}}}t.defaultOptions=x(u.defaultOptions,{centeredLinks:!1,offset:"100%",equalNodes:!1,reversed:!1,dataLabels:{linkTextPath:{attributes:{startOffset:"25%"}}},marker:{symbol:"circle",fillOpacity:1,lineWidth:0,states:{}}});
-B(t.prototype,{orderNodes:!1});t.prototype.pointClass=b;r.registerSeriesType("arcdiagram",t);"";return t});p(b,"masters/modules/arc-diagram.src.js",[],function(){})});
-//# sourceMappingURL=arc-diagram.js.map
+B(t.prototype,{orderNodes:!1});t.prototype.pointClass=b;r.registerSeriesType("arcdiagram",t);"";return t});p(b,"masters/modules/arc-diagram.src.js",[],function(){})});//# sourceMappingURL=arc-diagram.js.map

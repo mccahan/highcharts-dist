@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Advanced Highcharts Stock tools
 
@@ -14,5 +14,4 @@ requestFullscreen:"mozRequestFullScreen",exitFullscreen:"mozCancelFullScreen"}:a
 this,b=a.chart,e=b.options.chart;h(b,"fullscreenClose",null,function(){if(a.isOpen&&a.browserProps&&b.container.ownerDocument instanceof Document)b.container.ownerDocument[a.browserProps.exitFullscreen]();a.unbindFullscreenEvent&&(a.unbindFullscreenEvent=a.unbindFullscreenEvent());b.setSize(a.origWidth,a.origHeight,!1);a.origWidth=void 0;a.origHeight=void 0;e.width=a.origWidthOption;e.height=a.origHeightOption;a.origWidthOption=void 0;a.origHeightOption=void 0;a.isOpen=!1;a.setButtonText()})};f.prototype.open=
 function(){var a=this,b=a.chart,e=b.options.chart;h(b,"fullscreenOpen",null,function(){e&&(a.origWidthOption=e.width,a.origHeightOption=e.height);a.origWidth=b.chartWidth;a.origHeight=b.chartHeight;if(a.browserProps){var c=g(b.container.ownerDocument,a.browserProps.fullscreenChange,function(){a.isOpen?(a.isOpen=!1,a.close()):(b.setSize(null,null,!1),a.isOpen=!0,a.setButtonText())}),d=g(b,"destroy",c);a.unbindFullscreenEvent=function(){c();d()};var f=b.renderTo[a.browserProps.requestFullscreen]();
 if(f)f["catch"](function(){alert("Full screen is not supported inside a frame.")})}})};f.prototype.setButtonText=function(){var a=this.chart,c=a.exportDivElements,e=a.options.exporting,d=e&&e.buttons&&e.buttons.contextButton.menuItems;a=a.options.lang;e&&e.menuItemDefinitions&&a&&a.exitFullscreen&&a.viewFullscreen&&d&&c&&(c=c[d.indexOf("viewFullscreen")])&&b.setElementHTML(c,this.isOpen?a.exitFullscreen:e.menuItemDefinitions.viewFullscreen.text||a.viewFullscreen)};f.prototype.toggle=function(){this.isOpen?
-this.close():this.open()};return f}();"";"";return k});d(b,"masters/modules/full-screen.src.js",[b["Core/Globals.js"],b["Extensions/Exporting/Fullscreen.js"]],function(b,c){b.Fullscreen=c;c.compose(b.Chart)})});
-//# sourceMappingURL=full-screen.js.map
+this.close():this.open()};return f}();"";"";return k});d(b,"masters/modules/full-screen.src.js",[b["Core/Globals.js"],b["Extensions/Exporting/Fullscreen.js"]],function(b,c){b.Fullscreen=c;c.compose(b.Chart)})});//# sourceMappingURL=full-screen.js.map

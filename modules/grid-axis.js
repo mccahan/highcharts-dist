@@ -1,5 +1,5 @@
 /*
- Highcharts Gantt JS v11.1.0 (2023-06-05)
+ Highcharts Gantt JS v11.1.0 (2023-08-20)
 
  GridAxis
 
@@ -28,5 +28,4 @@ n:k)||0))-l,c.left+c.len));this.slotWidth=e-p;a.pos.x="left"===q?p:"right"===q?e
 a.linkedParent.grid.columns||a.grid.columns,e=b?a.linkedParent:a;let d=-1,f=0;(a.chart[a.coll]||[]).forEach((b,c)=>{b.side!==a.side||b.options.isInternal||(f=c,b===e&&(d=c))});return f===d&&(t(b)?c.length===b:!0)}renderBorder(a){const b=this.axis,c=b.chart.renderer,e=b.options;a=c.path(a).addClass("highcharts-axis-line").add(b.axisBorder);c.styledMode||a.attr({stroke:e.lineColor,"stroke-width":e.lineWidth,zIndex:7});return a}}A.E=function(a){return this.dateFormat("%a",a,!0).charAt(0)};A.W=function(a){const b=
 this,c=new this.Date(a);["Hours","Milliseconds","Minutes","Seconds"].forEach(function(a){b.set(a,c,0)});var e=(this.get("Day",c)+6)%7;a=new this.Date(c.valueOf());this.set("Date",a,this.get("Date",c)-e+3);e=new this.Date(this.get("FullYear",a),0,1);4!==this.get("Day",e)&&(this.set("Month",c,0),this.set("Date",c,1+(11-this.get("Day",e))%7));return(1+Math.floor((a.valueOf()-e.valueOf())/6048E5)).toString()};"";return{compose:function(a,b,c){k.pushUnique(x,a)&&(a.keepProps.push("grid"),a.prototype.getMaxLabelDimensions=
 n,W(a.prototype,"unsquish",V),h(a,"init",P),h(a,"afterGetOffset",B),h(a,"afterGetTitlePosition",C),h(a,"afterInit",E),h(a,"afterRender",F),h(a,"afterSetAxisTranslation",G),h(a,"afterSetOptions",H),h(a,"afterSetOptions",J),h(a,"afterSetScale",K),h(a,"afterTickSize",L),h(a,"trimTicks",U),h(a,"destroy",O));k.pushUnique(x,b)&&h(b,"afterSetChartSize",N);k.pushUnique(x,c)&&(h(c,"afterGetLabelPosition",R),h(c,"labelFormat",S));return a}}});n(g,"masters/modules/grid-axis.src.js",[g["Core/Globals.js"],g["Core/Axis/GridAxis.js"]],
-function(g,l){l.compose(g.Axis,g.Chart,g.Tick)})});
-//# sourceMappingURL=grid-axis.js.map
+function(g,l){l.compose(g.Axis,g.Chart,g.Tick)})});//# sourceMappingURL=grid-axis.js.map

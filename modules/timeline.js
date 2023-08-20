@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Timeline series
 
@@ -22,5 +22,4 @@ super.generatePoints.apply(a);a.points.forEach(function(b,d){b.applyOptions({x:a
 a.points.forEach(function(a){a.isInside=a.isInside&&a.visible;a.visible&&!a.isNull&&(v(b)&&(d=Math.min(d,Math.abs(a.plotX-b))),b=a.plotX)});a.closestPointRangePx=d}));a.eventsToUnbind.push(h(a,"drawDataLabels",function(){a.distributeDL()}));a.eventsToUnbind.push(h(a,"afterDrawDataLabels",function(){let b;a.points.forEach(function(a){if(b=a.dataLabel)return b.animate=function(a){this.targetPosition&&(this.targetPosition=a);return c.prototype.animate.apply(this,arguments)},b.targetPosition||(b.targetPosition=
 {}),a.drawConnector()})}));a.eventsToUnbind.push(h(a.chart,"afterHideOverlappingLabel",function(){a.points.forEach(function(a){a.connector&&a.dataLabel&&a.dataLabel.oldOpacity!==a.dataLabel.newOpacity&&a.alignConnector()})}))}markerAttribs(a,b){var d=this.options.marker;let c=a.marker||{},e=c.symbol||d.symbol,g=f(c.width,d.width,this.closestPointRangePx),k=f(c.height,d.height),h=0;if(this.xAxis.dateTime)return super.markerAttribs.call(this,a,b);b&&(d=d.states[b]||{},b=c.states&&c.states[b]||{},h=
 f(b.radius,d.radius,h+(d.radiusPlus||0)));a.hasImage=e&&0===e.indexOf("url");a={x:Math.floor(a.plotX)-g/2-h/2,y:a.plotY-k/2-h/2,width:g+h,height:k+h};return this.chart.inverted?{y:a.x&&a.width&&this.xAxis.len-a.x-a.width,x:a.y&&a.y,width:a.height,height:a.width}:a}processData(){let a=0,b;this.visibilityMap=this.getVisibilityMap();this.visibilityMap.forEach(function(b){b&&a++});this.visiblePointsCount=a;for(b=0;b<this.xData.length;b++)this.yData[b]=1;super.processData.call(this,arguments)}}p.defaultOptions=
-g(l.defaultOptions,t);q(p.prototype,{drawTracker:k.prototype.drawTracker,pointClass:r,trackerGroups:["markerGroup","dataLabelsGroup"]});b.registerSeriesType("timeline",p);"";return p});c(b,"masters/modules/timeline.src.js",[],function(){})});
-//# sourceMappingURL=timeline.js.map
+g(l.defaultOptions,t);q(p.prototype,{drawTracker:k.prototype.drawTracker,pointClass:r,trackerGroups:["markerGroup","dataLabelsGroup"]});b.registerSeriesType("timeline",p);"";return p});c(b,"masters/modules/timeline.src.js",[],function(){})});//# sourceMappingURL=timeline.js.map

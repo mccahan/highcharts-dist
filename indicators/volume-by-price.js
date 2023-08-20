@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -21,5 +21,4 @@ m));c.push(g);for(d=c.length;h<d;h++)k.push({index:h-1,x:e[0],start:c[h-1],end:c
 !c.options.compareToMain&&d.dataModify&&(r=d.dataModify.modifyValue(r),n=d.dataModify.modifyValue(n));r<=b.start&&0===b.index&&(m=!0);r>=b.end&&b.index===h&&(p=!0);(r>b.start||m)&&(r<b.end||p)&&(b.wholeVolumeData+=f[q],n>r?b.negativeVolumeData+=f[q]:b.positiveVolumeData+=f[q])}c.volumeDataArray.push(b.wholeVolumeData)});return e}drawZones(a,e,b,d){const c=a.renderer,l=a.plotWidth,k=a.plotTop;let f=this.zoneLinesSVG,h=[],g;b.forEach(function(b){g=e.toPixels(b)-k;h=h.concat(a.renderer.crispLine([["M",
 0,g],["L",l,g]],d.lineWidth))});f?f.animate({d:h}):f=this.zoneLinesSVG=c.path(h).attr({"stroke-width":d.lineWidth,stroke:d.color,dashstyle:d.dashStyle,zIndex:this.group.zIndex+.1}).add(this.group)}}x.defaultOptions=L(B.defaultOptions,{params:{index:void 0,period:void 0,ranges:12,volumeSeriesID:"volume"},zoneLines:{enabled:!0,styles:{color:"#0A9AC9",dashStyle:"LongDash",lineWidth:1}},volumeDivision:{enabled:!0,styles:{positiveColor:"rgba(144, 237, 125, 0.8)",negativeColor:"rgba(244, 91, 91, 0.8)"}},
 animationLimit:1E3,enableMouseTracking:!1,pointPadding:0,zIndex:-1,crisp:!0,dataGrouping:{enabled:!1},dataLabels:{allowOverlap:!0,enabled:!0,format:"P: {point.volumePos:.2f} | N: {point.volumeNeg:.2f}",padding:0,style:{fontSize:"0.5em"},verticalAlign:"top"}});E(x.prototype,{nameBase:"Volume by Price",nameComponents:["ranges"],calculateOn:{chart:"render",xAxis:"afterSetExtremes"},pointClass:a,markerAttribs:l,drawGraph:l,getColumnMetrics:w.getColumnMetrics,crispCol:w.crispCol});u.registerSeriesType("vbp",
-x);"";return x});p(a,"masters/indicators/volume-by-price.src.js",[],function(){})});
-//# sourceMappingURL=volume-by-price.js.map
+x);"";return x});p(a,"masters/indicators/volume-by-price.src.js",[],function(){})});//# sourceMappingURL=volume-by-price.js.map

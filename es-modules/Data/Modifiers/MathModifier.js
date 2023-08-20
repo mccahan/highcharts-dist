@@ -151,8 +151,8 @@ class MathModifier extends DataModifier {
  * @private
  */
 MathModifier.defaultOptions = {
-    alternativeSeparators: false,
-    modifier: 'Math'
+    type: 'Math',
+    alternativeSeparators: false
 };
 DataModifier.registerType('Math', MathModifier);
 /* *

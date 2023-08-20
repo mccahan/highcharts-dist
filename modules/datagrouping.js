@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Data grouping module
 
@@ -28,5 +28,4 @@ null===v&&(r[0].hasNulls=!0)}return{groupedXData:n,groupedYData:g,groupMap:p}}fu
 const {series:{prototype:h}}=J,{addEvent:y,defined:H,error:A,extend:B,isNumber:w,merge:D,pick:t}=I,K=h.generatePoints,E=[];return{compose:function(a){const h=a.prototype.pointClass;I.pushUnique(E,h)&&y(h,"update",function(){if(this.dataGroup)return A(24,!1,this.series.chart),!1});I.pushUnique(E,a)&&(y(a,"afterSetOptions",d),y(a,"destroy",p),B(a.prototype,{applyGrouping:k,destroyGroupedData:p,generatePoints:f,getDGApproximation:b,groupData:e}))},groupData:e}});l(a,"Extensions/DataGrouping/DataGrouping.js",
 [a["Extensions/DataGrouping/DataGroupingAxisComposition.js"],a["Extensions/DataGrouping/DataGroupingDefaults.js"],a["Extensions/DataGrouping/DataGroupingSeriesComposition.js"],a["Core/Templating.js"],a["Core/Utilities.js"]],function(a,n,k,g,l){function p(a){const d=this.chart,e=d.time,k=a.labelConfig,g=k.series;var l=g.tooltipOptions,p=g.options.dataGrouping;const D=g.xAxis;var t=l.xDateFormat;let z,E,x=l[a.isFooter?"footerFormat":"headerFormat"];D&&"datetime"===D.options.type&&p&&b(k.key)&&(E=g.currentDataGrouping,
 p=p.dateTimeLabelFormats||n.common.dateTimeLabelFormats,E?(l=p[E.unitName],1===E.count?t=l[0]:(t=l[1],z=l[2])):!t&&p&&D.dateTime&&(t=D.dateTime.getXDateFormat(k.x,l.dateTimeLabelFormats)),t=e.dateFormat(t,k.key),z&&(t+=e.dateFormat(z,k.key+E.totalRange-1)),g.chart.styledMode&&(x=this.styledModeFormat(x)),a.text=F(x,{point:f(k.point,{key:t}),series:g},d),a.preventDefault())}const {format:F}=g,{addEvent:z,extend:f,isNumber:b}=l,e=[];g={compose:function(b,f,g){a.compose(b);k.compose(f);g&&l.pushUnique(e,
-g)&&z(g,"headerFormatter",p)},groupData:k.groupData};"";"";return g});l(a,"masters/modules/datagrouping.src.js",[a["Core/Globals.js"],a["Extensions/DataGrouping/ApproximationDefaults.js"],a["Extensions/DataGrouping/ApproximationRegistry.js"],a["Extensions/DataGrouping/DataGrouping.js"]],function(a,l,k,g){a.dataGrouping={approximationDefaults:l,approximations:k};g.compose(a.Axis,a.Series,a.Tooltip)})});
-//# sourceMappingURL=datagrouping.js.map
+g)&&z(g,"headerFormatter",p)},groupData:k.groupData};"";"";return g});l(a,"masters/modules/datagrouping.src.js",[a["Core/Globals.js"],a["Extensions/DataGrouping/ApproximationDefaults.js"],a["Extensions/DataGrouping/ApproximationRegistry.js"],a["Extensions/DataGrouping/DataGrouping.js"]],function(a,l,k,g){a.dataGrouping={approximationDefaults:l,approximations:k};g.compose(a.Axis,a.Series,a.Tooltip)})});//# sourceMappingURL=datagrouping.js.map

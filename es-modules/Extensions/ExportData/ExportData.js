@@ -636,6 +636,9 @@ function chartToggleDataTable(show) {
                 wasHidden: createContainer || oldDisplay !== style.display
             });
         }
+        else {
+            fireEvent(this, 'afterHideData');
+        }
     }
     // Set the flag
     this.isDataTableVisible = show;

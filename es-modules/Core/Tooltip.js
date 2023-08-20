@@ -48,7 +48,6 @@ class Tooltip {
          *
          * */
         this.allowShared = true;
-        this.container = void 0;
         this.crosshairs = [];
         this.distance = 0;
         this.isHidden = true;
@@ -236,9 +235,8 @@ class Tooltip {
      * Tooltip label
      */
     getLabel() {
-        const tooltip = this, styledMode = this.chart.styledMode, options = this.options, doSplit = this.split && this.allowShared, pointerEvents = (options.style.pointerEvents ||
-            (this.shouldStickOnContact() ? 'auto' : 'none'));
-        let container, renderer = this.chart.renderer;
+        const tooltip = this, styledMode = this.chart.styledMode, options = this.options, doSplit = this.split && this.allowShared;
+        let container = this.container, renderer = this.chart.renderer;
         // If changing from a split tooltip to a non-split tooltip, we must
         // destroy it in order to get the SVG right. #13868.
         if (this.label) {
@@ -260,13 +258,15 @@ class Tooltip {
                  */
                 this.container = container = H.doc.createElement('div');
                 container.className = 'highcharts-tooltip-container';
+                // We need to set pointerEvents = 'none' as otherwise it makes
+                // the area under the tooltip non-hoverable even after the
+                // tooltip disappears, #19035.
                 css(container, {
                     position: 'absolute',
                     top: '1px',
-                    pointerEvents,
+                    pointerEvents: 'none',
                     zIndex: Math.max(this.options.style.zIndex || 0, (chartStyle && chartStyle.zIndex || 0) + 3)
                 });
-                H.doc.body.appendChild(container);
                 /**
                  * Reference to the tooltip's renderer, when
                  * [Highcharts.Tooltip#outside] is set to true, otherwise
@@ -296,7 +296,10 @@ class Tooltip {
                     })
                         // #2301, #2657
                         .css(options.style)
-                        .css({ pointerEvents });
+                        .css({
+                        pointerEvents: (options.style.pointerEvents ||
+                            (this.shouldStickOnContact() ? 'auto' : 'none'))
+                    });
                 }
             }
             // Split tooltip use updateTooltipContainer to position the tooltip
@@ -306,17 +309,24 @@ class Tooltip {
                 const { xSetter, ySetter } = label;
                 label.xSetter = function (value) {
                     xSetter.call(label, tooltip.distance);
-                    container.style.left = value + 'px';
+                    if (container) {
+                        container.style.left = value + 'px';
+                    }
                 };
                 label.ySetter = function (value) {
                     ySetter.call(label, tooltip.distance);
-                    container.style.top = value + 'px';
+                    if (container) {
+                        container.style.top = value + 'px';
+                    }
                 };
             }
             this.label
                 .attr({ zIndex: 8 })
                 .shadow(options.shadow)
                 .add();
+        }
+        if (container && !container.parentElement) {
+            H.doc.body.appendChild(container);
         }
         return this.label;
     }
@@ -504,15 +514,28 @@ class Tooltip {
      */
     hide(delay) {
         const tooltip = this;
-        // disallow duplicate timers (#1728, #1766)
+        // Disallow duplicate timers (#1728, #1766)
         U.clearTimeout(this.hideTimer);
         delay = pick(delay, this.options.hideDelay);
         if (!this.isHidden) {
             this.hideTimer = syncTimeout(function () {
-                // If there is a delay, do fadeOut with the default duration. If
+                const label = tooltip.getLabel();
+                // If there is a delay, fade out with the default duration. If
                 // the hideDelay is 0, we assume no animation is wanted, so we
                 // pass 0 duration. #12994.
-                tooltip.getLabel().fadeOut(delay ? void 0 : delay);
+                tooltip.getLabel().animate({
+                    opacity: 0
+                }, {
+                    duration: delay ? 150 : delay,
+                    complete: () => {
+                        // #3088, assuming we're only using this for tooltips
+                        label.hide();
+                        // Clear the container for outside tooltip (#18490)
+                        if (tooltip.container) {
+                            tooltip.container.remove();
+                        }
+                    }
+                });
                 tooltip.isHidden = true;
             }, delay);
         }
@@ -1210,12 +1233,12 @@ class Tooltip {
      * @param {Highcharts.Point} point
      */
     updatePosition(point) {
-        const { chart, distance, options } = this, pointer = chart.pointer, label = this.getLabel(), 
+        const { chart, container, distance, options } = this, pointer = chart.pointer, label = this.getLabel(), 
         // Needed for outside: true (#11688)
         { left, top, scaleX, scaleY } = pointer.getChartPosition(), pos = (options.positioner || this.getPosition).call(this, label.width, label.height, point);
         let anchorX = (point.plotX || 0) + chart.plotLeft, anchorY = (point.plotY || 0) + chart.plotTop, pad;
         // Set the renderer size dynamically to prevent document size to change
-        if (this.outside) {
+        if (this.outside && container) {
             // Corrects positions, occurs with tooltip positioner (#16944)
             if (options.positioner) {
                 pos.x += left - distance;
@@ -1226,7 +1249,7 @@ class Tooltip {
             // Anchor and tooltip container need scaling if chart container has
             // scale transform/css zoom. #11329.
             if (scaleX !== 1 || scaleY !== 1) {
-                css(this.container, {
+                css(container, {
                     transform: `scale(${scaleX}, ${scaleY})`
                 });
                 anchorX *= scaleX;
@@ -1366,6 +1389,6 @@ export default Tooltip;
 * @type {number}
 */
 /**
- * @typedef {"callout"|"circle"|"square"} Highcharts.TooltipShapeValue
+ * @typedef {"callout"|"circle"|"rect"} Highcharts.TooltipShapeValue
  */
 ''; // keeps doclets above in JS file

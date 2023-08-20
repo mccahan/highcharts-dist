@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Data grouping module
 
@@ -28,5 +28,4 @@ function e(a){a=a.options;var d=this.type,c=this.chart.options.plotOptions,e=thi
 c.isNumber,z=c.merge,u=c.pick,L=t.generatePoints,A=[];return{compose:function(a){var b=a.prototype.pointClass;c.pushUnique(A,b)&&x(b,"update",function(){if(this.dataGroup)return D(24,!1,this.series.chart),!1});c.pushUnique(A,a)&&(x(a,"afterSetOptions",e),x(a,"destroy",m),E(a.prototype,{applyGrouping:g,destroyGroupedData:m,generatePoints:l,getDGApproximation:d,groupData:v}))},groupData:v}});h(a,"Extensions/DataGrouping/DataGrouping.js",[a["Extensions/DataGrouping/DataGroupingAxisComposition.js"],a["Extensions/DataGrouping/DataGroupingDefaults.js"],
 a["Extensions/DataGrouping/DataGroupingSeriesComposition.js"],a["Core/Templating.js"],a["Core/Utilities.js"]],function(a,b,m,k,h){function c(a){var c=this.chart,e=c.time,h=a.labelConfig,m=h.series,k=m.tooltipOptions,q=m.options.dataGrouping,z=m.xAxis,u=k.xDateFormat,v=k[a.isFooter?"footerFormat":"headerFormat"];if(z&&"datetime"===z.options.type&&q&&d(h.key)){var A=m.currentDataGrouping;q=q.dateTimeLabelFormats||b.common.dateTimeLabelFormats;if(A)if(k=q[A.unitName],1===A.count)u=k[0];else{u=k[1];var y=
 k[2]}else!u&&q&&z.dateTime&&(u=z.dateTime.getXDateFormat(h.x,k.dateTimeLabelFormats));u=e.dateFormat(u,h.key);y&&(u+=e.dateFormat(y,h.key+A.totalRange-1));m.chart.styledMode&&(v=this.styledModeFormat(v));a.text=g(v,{point:l(h.point,{key:u}),series:m},c);a.preventDefault()}}var g=k.format,G=h.addEvent,l=h.extend,d=h.isNumber,v=[];k={compose:function(b,d,g){a.compose(b);m.compose(d);g&&h.pushUnique(v,g)&&G(g,"headerFormatter",c)},groupData:m.groupData};"";"";return k});h(a,"masters/modules/datagrouping.src.js",
-[a["Core/Globals.js"],a["Extensions/DataGrouping/ApproximationDefaults.js"],a["Extensions/DataGrouping/ApproximationRegistry.js"],a["Extensions/DataGrouping/DataGrouping.js"]],function(a,b,h,k){a.dataGrouping={approximationDefaults:b,approximations:h};k.compose(a.Axis,a.Series,a.Tooltip)})});
-//# sourceMappingURL=datagrouping.js.map
+[a["Core/Globals.js"],a["Extensions/DataGrouping/ApproximationDefaults.js"],a["Extensions/DataGrouping/ApproximationRegistry.js"],a["Extensions/DataGrouping/DataGrouping.js"]],function(a,b,h,k){a.dataGrouping={approximationDefaults:b,approximations:h};k.compose(a.Axis,a.Series,a.Tooltip)})});//# sourceMappingURL=datagrouping.js.map

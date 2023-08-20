@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Client side exporting module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -427,7 +425,8 @@
                             curParent = curParent.parentNode;
                         }
                     };
-                    var titleElements;
+                    var titleElements,
+                        outlineElements;
                     // Workaround for the text styling. Making sure it does pick up
                     // settings for parent elements.
                     [].forEach.call(textElements, function (el) {
@@ -449,6 +448,12 @@
                         [].forEach.call(titleElements, function (titleElement) {
                             el.removeChild(titleElement);
                         });
+                        // Remove all .highcharts-text-outline elements, #17170
+                        outlineElements =
+                            el.getElementsByClassName('highcharts-text-outline');
+                        while (outlineElements.length > 0) {
+                            el.removeChild(outlineElements[0]);
+                        }
                     });
                     var svgNode = dummySVGContainer.querySelector('svg');
                     if (svgNode) {

@@ -151,6 +151,12 @@ class InfoRegionsComponent extends AccessibilityComponent {
                 }, 300);
             }
         });
+        this.addEvent(chart, 'afterHideData', function () {
+            if (component.viewDataTableButton) {
+                component.viewDataTableButton
+                    .setAttribute('aria-expanded', 'false');
+            }
+        });
         this.announcer = new Announcer(chart, 'assertive');
     }
     /**
@@ -344,7 +350,7 @@ class InfoRegionsComponent extends AccessibilityComponent {
      */
     getLinkedDescription() {
         const el = this.linkedDescriptionElement, content = el && el.innerHTML || '';
-        return stripHTMLTagsFromString(content);
+        return stripHTMLTagsFromString(content, this.chart.renderer.forExport);
     }
     /**
      * @private
@@ -389,7 +395,7 @@ class InfoRegionsComponent extends AccessibilityComponent {
      */
     getSubtitleText() {
         const subtitle = (this.chart.options.subtitle);
-        return stripHTMLTagsFromString(subtitle && subtitle.text || '');
+        return stripHTMLTagsFromString(subtitle && subtitle.text || '', this.chart.renderer.forExport);
     }
     /**
      * @private

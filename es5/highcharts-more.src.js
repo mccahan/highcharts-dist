@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * (c) 2009-2021 Torstein Honsi
  *
@@ -26,12 +26,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -4741,6 +4739,10 @@
                         x4,
                         y1,
                         y2;
+                    // Adjust for null or missing points
+                    if (options.centerInCategory) {
+                        barX = series.adjustForMissingColumns(barX, pointWidth, point, metrics);
+                    }
                     point.barX = barX;
                     point.pointWidth = pointWidth;
                     // Fix the tooltip on center of grouped pyramids

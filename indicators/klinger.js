@@ -1,5 +1,5 @@
 /*
- Highcharts Stock JS v11.1.0 (2023-06-05)
+ Highcharts Stock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -18,5 +18,4 @@ r("Series "+a.params.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,e.c
 h=b,m=p;return a}getEMA(c,a,p,e,f,m,h){return l.prototype.calculateEma(h||[],c,"undefined"===typeof m?1:m,e,a,"undefined"===typeof f?-1:f,p)}getSMA(c,a,p){return l.prototype.accumulatePeriodPoints(c,a,p)/c}getValues(c,a){const d=[],e=c.xData;c=c.yData;const f=[],m=[],h=[];var b;let g=0,k=0,l=void 0,q=void 0,n=null;if(this.isValidData(c[0])){var r=this.getVolumeForce(c),t=this.getSMA(a.fastAvgPeriod,0,r),v=this.getSMA(a.slowAvgPeriod,0,r),w=2/(a.fastAvgPeriod+1),x=2/(a.slowAvgPeriod+1);for(g;g<c.length;g++)g>=
 a.fastAvgPeriod&&(l=k=this.getEMA(r,l,t,w,0,g,e)[1]),g>=a.slowAvgPeriod&&(q=b=this.getEMA(r,q,v,x,0,g,e)[1],b=u(k-b),h.push(b),h.length>=a.signalPeriod&&(n=h.slice(-a.signalPeriod).reduce((a,b)=>a+b)/a.signalPeriod),d.push([e[g],b,n]),f.push(e[g]),m.push([b,n]));return{values:d,xData:f,yData:m}}}}n.defaultOptions=v(t.defaultOptions,{params:{fastAvgPeriod:34,slowAvgPeriod:55,signalPeriod:13,volumeSeriesID:"volume"},signalLine:{styles:{lineWidth:1,lineColor:"#ff0000"}},dataGrouping:{approximation:"averages"},
 tooltip:{pointFormat:'<span style="color: {point.color}">\u25cf</span><b> {series.name}</b><br/><span style="color: {point.color}">Klinger</span>: {point.y}<br/><span style="color: {point.series.options.signalLine.styles.lineColor}">Signal</span>: {point.signal}<br/>'}});w(n.prototype,{areaLinesNames:[],linesApiNames:["signalLine"],nameBase:"Klinger",nameComponents:["fastAvgPeriod","slowAvgPeriod"],pointArrayMap:["y","signal"],parallelArrays:["x","y","signal"],pointValKey:"y"});a.compose(n);k.registerSeriesType("klinger",
-n);"";return n});l(a,"masters/indicators/klinger.src.js",[],function(){})});
-//# sourceMappingURL=klinger.js.map
+n);"";return n});l(a,"masters/indicators/klinger.src.js",[],function(){})});//# sourceMappingURL=klinger.js.map

@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * Annotations module
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -4112,7 +4110,9 @@
                             langKey: 'label',
                             type: 'basicAnnotation',
                             labelOptions: {
-                                format: '{y:.2f}'
+                                format: '{y:.2f}',
+                                overflow: 'none',
+                                crop: true
                             },
                             labels: [{
                                     point: {
@@ -4120,9 +4120,7 @@
                                         yAxis: coordsY.axis.index,
                                         x: coordsX.value,
                                         y: coordsY.value
-                                    },
-                                    overflow: 'none',
-                                    crop: true
+                                    }
                                 }]
                         }, navigation
                             .annotationsOptions, navigation
@@ -4790,7 +4788,7 @@
                 function traverse(option, key, parentEditables, parent, parentKey) {
                     let nextParent;
                     if (parentEditables &&
-                        option &&
+                        defined(option) &&
                         nonEditables.indexOf(key) === -1 &&
                         ((parentEditables.indexOf &&
                             parentEditables.indexOf(key)) >= 0 ||
@@ -6151,7 +6149,7 @@
             constructor(parentDiv, iconsURL, chart) {
                 super(parentDiv, iconsURL);
                 this.chart = chart;
-                this.lang = getOptions().lang.navigation.popup;
+                this.lang = (getOptions().lang.navigation || {}).popup || {};
                 addEvent(this.container, 'mousedown', () => {
                     const activeAnnotation = chart &&
                         chart.navigationBindings &&
@@ -8897,6 +8895,16 @@
                 this.offsetX = 0;
                 this.offsetY = 0;
             }
+            this.options.typeOptions.point = {
+                x: this.startXMin,
+                y: this.startYMin
+            };
+            // We need to update userOptions as well as they are used in
+            // the Annotation.update() method to initialize the annotation, #19121.
+            this.userOptions.typeOptions.point = {
+                x: this.startXMin,
+                y: this.startYMin
+            };
         }
         /* *
          *
@@ -9196,10 +9204,6 @@
             }
             translate(dx, dy) {
                 this.shapes.forEach((item) => item.translate(dx, dy));
-                this.options.typeOptions.point = {
-                    x: this.startXMin,
-                    y: this.startYMin
-                };
             }
         }
         Measure.prototype.defaultOptions = merge(Annotation.prototype.defaultOptions, 

@@ -103,8 +103,8 @@ const SankeySeriesDefaults = {
         inside: true
     },
     /**
-     * @ignore-option
-     *
+     * @default   true
+     * @extends   plotOptions.series.inactiveOtherPoints
      * @private
      */
     inactiveOtherPoints: true,
@@ -197,6 +197,18 @@ const SankeySeriesDefaults = {
      * @private
      */
     minLinkWidth: 0,
+    /**
+     * Determines which side of the chart the nodes are to be aligned to. When
+     * the chart is inverted, `top` aligns to the left and `bottom` to the
+     * right.
+     *
+     * @sample highcharts/plotoptions/sankey-nodealignment
+     *         Node alignment demonstrated
+     *
+     * @type      {'top'|'center'|'bottom'}
+     * @apioption plotOptions.sankey.nodeAlignment
+     */
+    nodeAlignment: 'center',
     /**
      * The pixel width of each node in a sankey diagram or dependency wheel,
      * or the height in case the chart is inverted.

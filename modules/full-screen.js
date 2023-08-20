@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Advanced Highcharts Stock tools
 
@@ -14,5 +14,4 @@ a.mozRequestFullScreen?this.browserProps={fullscreenChange:"mozfullscreenchange"
 this,b=a.chart,d=b.options.chart;g(b,"fullscreenClose",null,function(){if(a.isOpen&&a.browserProps&&b.container.ownerDocument instanceof Document)b.container.ownerDocument[a.browserProps.exitFullscreen]();a.unbindFullscreenEvent&&(a.unbindFullscreenEvent=a.unbindFullscreenEvent());b.setSize(a.origWidth,a.origHeight,!1);a.origWidth=void 0;a.origHeight=void 0;d.width=a.origWidthOption;d.height=a.origHeightOption;a.origWidthOption=void 0;a.origHeightOption=void 0;a.isOpen=!1;a.setButtonText()})}open(){const a=
 this,b=a.chart,d=b.options.chart;g(b,"fullscreenOpen",null,function(){d&&(a.origWidthOption=d.width,a.origHeightOption=d.height);a.origWidth=b.chartWidth;a.origHeight=b.chartHeight;if(a.browserProps){const d=f(b.container.ownerDocument,a.browserProps.fullscreenChange,function(){a.isOpen?(a.isOpen=!1,a.close()):(b.setSize(null,null,!1),a.isOpen=!0,a.setButtonText())}),e=f(b,"destroy",d);a.unbindFullscreenEvent=()=>{d();e()};const c=b.renderTo[a.browserProps.requestFullscreen]();if(c)c["catch"](function(){alert("Full screen is not supported inside a frame.")})}})}setButtonText(){var a=
 this.chart,c=a.exportDivElements;const d=a.options.exporting,e=d&&d.buttons&&d.buttons.contextButton.menuItems;a=a.options.lang;d&&d.menuItemDefinitions&&a&&a.exitFullscreen&&a.viewFullscreen&&e&&c&&(c=c[e.indexOf("viewFullscreen")])&&b.setElementHTML(c,this.isOpen?a.exitFullscreen:d.menuItemDefinitions.viewFullscreen.text||a.viewFullscreen)}toggle(){this.isOpen?this.close():this.open()}}"";"";return h});c(b,"masters/modules/full-screen.src.js",[b["Core/Globals.js"],b["Extensions/Exporting/Fullscreen.js"]],
-function(b,c){b.Fullscreen=c;c.compose(b.Chart)})});
-//# sourceMappingURL=full-screen.js.map
+function(b,c){b.Fullscreen=c;c.compose(b.Chart)})});//# sourceMappingURL=full-screen.js.map

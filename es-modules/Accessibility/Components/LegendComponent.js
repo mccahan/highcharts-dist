@@ -238,7 +238,7 @@ class LegendComponent extends AccessibilityComponent {
         const legendTitle = stripHTMLTags((chart.legend &&
             chart.legend.options.title &&
             chart.legend.options.title.text ||
-            '').replace(/<br ?\/?>/g, ' '));
+            '').replace(/<br ?\/?>/g, ' '), chart.renderer.forExport);
         const legendLabel = chart.langFormat('accessibility.legend.legendLabel' + (legendTitle ? '' : 'NoTitle'), {
             chart,
             legendTitle,
@@ -286,7 +286,7 @@ class LegendComponent extends AccessibilityComponent {
         }
         const itemLabel = this.chart.langFormat('accessibility.legend.legendItem', {
             chart: this.chart,
-            itemName: stripHTMLTags(item.name),
+            itemName: stripHTMLTags(item.name, this.chart.renderer.forExport),
             item
         });
         const attribs = {

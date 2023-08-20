@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -15,5 +15,4 @@ b.points=q;b.options=c;b.graph=k;f.drawGraph.call(b)}function k(b){var a;let d=[
 f.translate.apply(this,arguments);this.points.forEach(h=>{b.forEach((b,c)=>{d=h[b];this.dataModify&&(d=this.dataModify.modifyValue(d));null!==d&&(h[a[c]]=this.yAxis.toPixels(d,!0))})})}const x=[],y=["bottomLine"],m=["top","bottom"],n=["top"];a.compose=function(b){if(c.pushUnique(x,b)){const a=b.prototype;a.linesApiNames=a.linesApiNames||y.slice();a.pointArrayMap=a.pointArrayMap||m.slice();a.pointValKey=a.pointValKey||"top";a.areaLinesNames=a.areaLinesNames||n.slice();a.drawGraph=v;a.getGraphPath=
 k;a.toYData=g;a.translate=t}return b}})(k||(k={}));return k});e(a,"Stock/Indicators/PC/PCIndicator.js",[a["Stock/Indicators/ArrayUtilities.js"],a["Stock/Indicators/MultipleLinesComposition.js"],a["Core/Color/Palettes.js"],a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,c,f,g,e){const {sma:p}=g.seriesTypes,{merge:k,extend:u}=e;class l extends p{constructor(){super(...arguments);this.points=this.options=this.data=void 0}getValues(c,e){e=e.period;const f=c.xData,g=(c=c.yData)?c.length:
 0,k=[],l=[],p=[];let m,n,b;if(!(g<e)){for(b=e;b<=g;b++){n=f[b-1];var h=c.slice(b-e,b);var d=a.getArrayExtremes(h,2,1);h=d[1];m=d[0];d=(h+m)/2;k.push([n,h,d,m]);l.push(n);p.push([h,d,m])}return{values:k,xData:l,yData:p}}}}l.defaultOptions=k(p.defaultOptions,{params:{index:void 0,period:20},lineWidth:1,topLine:{styles:{lineColor:f.colors[2],lineWidth:1}},bottomLine:{styles:{lineColor:f.colors[8],lineWidth:1}},dataGrouping:{approximation:"averages"}});u(l.prototype,{areaLinesNames:["top","bottom"],nameBase:"Price Channel",
-nameComponents:["period"],linesApiNames:["topLine","bottomLine"],pointArrayMap:["top","middle","bottom"],pointValKey:"middle"});c.compose(l);g.registerSeriesType("pc",l);"";return l});e(a,"masters/indicators/price-channel.src.js",[],function(){})});
-//# sourceMappingURL=price-channel.js.map
+nameComponents:["period"],linesApiNames:["topLine","bottomLine"],pointArrayMap:["top","middle","bottom"],pointValKey:"middle"});c.compose(l);g.registerSeriesType("pc",l);"";return l});e(a,"masters/indicators/price-channel.src.js",[],function(){})});//# sourceMappingURL=price-channel.js.map

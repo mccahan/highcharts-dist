@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Support for parallel coordinates in Highcharts
 
@@ -16,5 +16,4 @@ a.yAxis=c.concat(b);a.xAxis=m(x,u(a.xAxis||{})[0])}});l(k,"update",function(a){a
 0:a.inverted?a.plotHeight-a.yAxis[f].top+a.plotTop:a.yAxis[f].left-a.plotLeft;e.clientX=e.plotX;e.plotY=a.yAxis[f].translate(e.y,!1,!0,void 0,!0);t(e.high)&&(e.plotHigh=a.yAxis[f].translate(e.high,!1,!0,void 0,!0));"undefined"!==typeof d&&(h=Math.min(h,Math.abs(e.plotX-d)));var d=e.plotX;e.isInside=a.isInsidePlot(e.plotX,e.plotY,{inverted:a.inverted})}else e.isNull=!0}this.closestPointRangePx=h}},{order:1});l(q,"destroy",function(){this.chart.hasParallelCoordinates&&(this.chart.axes||[]).forEach(function(a){a&&
 a.series&&(D(a.series,this),a.isDirty=a.forceRedraw=!0)},this)});["line","spline"].forEach(function(a){F(p.seriesTypes[a].prototype.pointClass.prototype,"getLabelConfig",z)});var G=function(){function a(a){this.axis=a}a.prototype.setPosition=function(a,b){var c=this.axis,f=c.chart,e=((this.position||0)+.5)/(f.parallelInfo.counter+1);f.polar?b.angle=360*e:(b[a[0]]=100*e+"%",c[a[1]]=b[a[1]]=0,c[a[2]]=b[a[2]]=null,c[a[3]]=b[a[3]]=null)};return a}(),n;(function(a){function b(a){var b=this.chart,c=this.parallelCoordinates,
 f=["left","width","height","top"];if(b.hasParallelCoordinates)if(b.inverted&&(f=f.reverse()),this.isXAxis)this.options=m(this.options,x,a.userOptions);else{var d=b.yAxis.indexOf(this);this.options=m(this.options,this.chart.options.chart.parallelAxes,a.userOptions);c.position=v(c.position,0<=d?d:b.yAxis.length);c.setPosition(f,this.options)}}function d(a){var b=this.chart,c=this.parallelCoordinates;if(c&&b&&b.hasParallelCoordinates&&!this.isXAxis){var f=c.position,d=[];this.series.forEach(function(a){a.yData&&
-a.visible&&t(f)&&d.push.apply(d,u(a.yData[f]))});d=d.filter(t);this.dataMin=C(d);this.dataMax=B(d);a.preventDefault()}}function g(){this.parallelCoordinates||(this.parallelCoordinates=new G(this))}a.compose=function(a){a.keepProps.push("parallel");l(a,"init",g);l(a,"afterSetOptions",b);l(a,"getSeriesExtremes",d)}})(n||(n={}));n.compose(b);return n});g(b,"masters/modules/parallel-coordinates.src.js",[],function(){})});
-//# sourceMappingURL=parallel-coordinates.js.map
+a.visible&&t(f)&&d.push.apply(d,u(a.yData[f]))});d=d.filter(t);this.dataMin=C(d);this.dataMax=B(d);a.preventDefault()}}function g(){this.parallelCoordinates||(this.parallelCoordinates=new G(this))}a.compose=function(a){a.keepProps.push("parallel");l(a,"init",g);l(a,"afterSetOptions",b);l(a,"getSeriesExtremes",d)}})(n||(n={}));n.compose(b);return n});g(b,"masters/modules/parallel-coordinates.src.js",[],function(){})});//# sourceMappingURL=parallel-coordinates.js.map

@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v11.1.0 (2023-06-05)
+ * @license Highcharts JS v11.1.0 (2023-08-20)
  *
  * X-range series
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -478,7 +476,8 @@
             isNumber = U.isNumber,
             isObject = U.isObject,
             merge = U.merge,
-            pick = U.pick;
+            pick = U.pick,
+            relativeLength = U.relativeLength;
         /* *
          *
          *  Constants
@@ -673,12 +672,12 @@
                     yAxis = this.yAxis,
                     metrics = this.columnMetrics,
                     options = this.options,
-                    borderRadius = options.borderRadius,
                     minPointLength = options.minPointLength || 0,
                     oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2,
                     seriesXOffset = this.pointXOffset = metrics.offset,
                     posX = pick(point.x2,
-                    point.x + (point.len || 0));
+                    point.x + (point.len || 0)),
+                    borderRadius = options.borderRadius;
                 var plotX = point.plotX,
                     plotX2 = xAxis.translate(posX, 0, 0, 0, 1);
                 var length = Math.abs(plotX2 - plotX),
@@ -715,19 +714,24 @@
                     point.plotY = yAxis.translate(point.y, 0, 1, 0, 1, options.pointPlacement);
                 }
                 var x = Math.floor(Math.min(plotX,
-                    plotX2)) + crisper;
-                var x2 = Math.floor(Math.max(plotX,
-                    plotX2)) + crisper;
+                    plotX2)) + crisper,
+                    x2 = Math.floor(Math.max(plotX,
+                    plotX2)) + crisper,
+                    width = x2 - x;
+                var r = Math.min(relativeLength((typeof borderRadius === 'object' ?
+                        borderRadius.radius :
+                        borderRadius || 0),
+                    pointHeight),
+                    Math.min(width,
+                    pointHeight) / 2);
                 var shapeArgs = {
                         x: x,
                         y: Math.floor(point.plotY + yOffset) + crisper,
-                        width: x2 - x,
-                        height: pointHeight
+                        width: width,
+                        height: pointHeight,
+                        r: r
                     };
                 point.shapeArgs = shapeArgs;
-                if (isNumber(borderRadius)) {
-                    point.shapeArgs.r = borderRadius;
-                }
                 // Move tooltip to default position
                 if (!inverted) {
                     point.tooltipPos[0] -= oldColWidth +
@@ -781,11 +785,7 @@
                     if (!isNumber(partialFill)) {
                         partialFill = 0;
                     }
-                    if (isNumber(borderRadius)) {
-                        point.partShapeArgs = merge(shapeArgs, {
-                            r: borderRadius
-                        });
-                    }
+                    point.partShapeArgs = merge(shapeArgs);
                     clipRectWidth = Math.max(Math.round(length * partialFill + point.plotX -
                         plotX), 0);
                     point.clipRectArgs = {

@@ -1,5 +1,5 @@
 /**
- * @license Highstock JS v11.1.0 (2023-06-05)
+ * @license Highstock JS v11.1.0 (2023-08-20)
  *
  * Highcharts Stock as a plugin for Highcharts
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -1839,8 +1837,7 @@
                 // if we have grouped data, use the grouping information to get the
                 // right format
                 if (currentDataGrouping) {
-                    labelFormats =
-                        dateTimeLabelFormats[currentDataGrouping.unitName];
+                    labelFormats = dateTimeLabelFormats[currentDataGrouping.unitName];
                     if (currentDataGrouping.count === 1) {
                         xDateFormat = labelFormats[0];
                     }
@@ -2361,11 +2358,15 @@
                         originalOptions = { startOnTick: startOnTick, endOnTick: endOnTick };
                     }
                     if (startOnTick || endOnTick) {
-                        yAxis.setOptions({ startOnTick: false, endOnTick: false });
+                        yAxis.setOptions(
+                        // Merge with y-axis options so `yAxis.id` isn't
+                        // overwritten during wheel zoom, #19178
+                        merge(yAxis.options, { startOnTick: false, endOnTick: false }));
                     }
                     wheelTimer = setTimeout(function () {
                         if (originalOptions) {
-                            yAxis.setOptions(originalOptions);
+                            // Repeat merge after the wheel zoom is finished, #19178
+                            yAxis.setOptions(merge(yAxis.options, originalOptions));
                             // Set the extremes to the same as they already are, but now
                             // with the original startOnTick and endOnTick. We need
                             // `forceRedraw` otherwise it will detect that the values
@@ -7876,10 +7877,10 @@
                         var minInput = rangeSelector.minInput,
                     maxInput = rangeSelector.maxInput;
                     // #3274 in some case blur is not defined
-                    if (minInput && (minInput.blur)) {
+                    if (minInput && !!minInput.blur) {
                         fireEvent(minInput, 'blur');
                     }
-                    if (maxInput && (maxInput.blur)) {
+                    if (maxInput && !!maxInput.blur) {
                         fireEvent(maxInput, 'blur');
                     }
                 };
@@ -8235,11 +8236,9 @@
                     var maxInput = rangeSelector.maxInput,
                         minInput = rangeSelector.minInput,
                         chartAxis = chart.xAxis[0],
-                        dataAxis = chart.scroller && chart.scroller.xAxis ?
-                            chart.scroller.xAxis :
-                            chartAxis,
-                        dataMin = dataAxis.dataMin,
-                        dataMax = dataAxis.dataMax;
+                        unionExtremes = (chart.scroller && chart.scroller.getUnionExtremes()) || chartAxis,
+                        dataMin = unionExtremes.dataMin,
+                        dataMax = unionExtremes.dataMax;
                     var value = rangeSelector.getInputValue(name);
                     if (value !== Number(input.getAttribute('data-hc-time-previous')) &&
                         isNumber(value)) {

@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  (c) 2009-2021 Torstein Honsi
 
@@ -11,5 +11,4 @@ style:{color:"#f0f0f0"},shadow:!0},legend:{backgroundColor:"#f0f0f0",borderColor
 drillUpButton:{theme:{fill:"#2F2B38",style:{color:"#fff"}}}},xAxis:{gridLineColor:"#ccc",labels:{style:{color:"#46465C",fontSize:"12px"}},lineColor:"#ccc",minorGridLineColor:"#ebebeb",tickColor:"#ccc",title:{style:{color:"#2F2B38"}}},yAxis:{gridLineColor:"#ccc",labels:{style:{color:"#46465C",fontSize:"12px"}},lineColor:"#ccc",minorGridLineColor:"#ebebeb",tickColor:"#ccc",tickWidth:1,title:{style:{color:"#2F2B38",fontWeight:"300"}}},rangeSelector:{buttonTheme:{fill:"#fff",style:{color:"#46465C",stroke:"transparent"},
 states:{hover:{fill:"#fff",style:{color:"#46465C"},"stroke-width":1,stroke:"#46465C"},select:{fill:"#fff",style:{color:"#46465C"},"stroke-width":1,stroke:"#46465C"}}},inputBoxBorderColor:"#BBBAC5",inputStyle:{backgroundColor:"#fff",color:"#46465C"},labelStyle:{color:"#46465C"}},scrollbar:{barBackgroundColor:"#BBBAC5",barBorderColor:"#808083",buttonArrowColor:"#fff",buttonBackgroundColor:"#BBBAC5",buttonBorderColor:"#46465C",rifleColor:"#FFF",trackBackgroundColor:"#dedede",trackBorderColor:"#BBBAC5"},
 plotOptions:{series:{borderWidth:1,borderColor:"#BBBAC5",dataLabels:{color:"#46465C",style:{fontSize:"13px"}},marker:{lineColor:"#46465C"}},boxplot:{fillColor:"#505053"},candlestick:{lineColor:null,upColor:"#DA6D85",upLineColor:"#DA6D85"},errorbar:{color:"white"},map:{borderColor:"rgba(200, 200, 200, 0.3)",nullColor:"rgba(200, 200, 200, 0.3)"}}};a.apply=function(){d("link",{href:"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:200,300,400,600,700",rel:"stylesheet",type:"text/css"},null,document.getElementsByTagName("head")[0]);
-b(a.options)}})(e||(e={}));return e});b(a,"masters/themes/brand-light.src.js",[a["Core/Globals.js"],a["Extensions/Themes/BrandLight.js"]],function(a,b){a.theme=b.options;b.apply()})});
-//# sourceMappingURL=brand-light.js.map
+b(a.options)}})(e||(e={}));return e});b(a,"masters/themes/brand-light.src.js",[a["Core/Globals.js"],a["Extensions/Themes/BrandLight.js"]],function(a,b){a.theme=b.options;b.apply()})});//# sourceMappingURL=brand-light.js.map

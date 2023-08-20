@@ -1,5 +1,5 @@
 /*
- Highstock JS v11.1.0 (2023-06-05)
+ Highstock JS v11.1.0 (2023-08-20)
 
  Indicator series type for Highcharts Stock
 
@@ -14,5 +14,4 @@ b.color=p}a.forEach((a,h)=>{n[h]?(b.points=n[h],c[a]?b.options=t(c[a].styles,l):
 this.nextPoints){if((a=f.getGraphPath.call(this,this.nextPoints))&&a.length){a[0][0]="L";d=f.getGraphPath.call(this,b);a=a.slice(0,d.length);for(let b=a.length-1;0<=b;b--)d.push(a[b])}}else d=f.getGraphPath.apply(this,arguments);return d}function k(b){const a=[];(this.pointArrayMap||[]).forEach(h=>{a.push(b[h])});return a}function l(){const b=this.pointArrayMap;let a=[],d;a=g(this);f.translate.apply(this,arguments);this.points.forEach(h=>{b.forEach((b,c)=>{d=h[b];this.dataModify&&(d=this.dataModify.modifyValue(d));
 null!==d&&(h[a[c]]=this.yAxis.toPixels(d,!0))})})}const y=[],v=["bottomLine"],z=["top","bottom"],A=["top"];a.compose=function(b){if(c.pushUnique(y,b)){const a=b.prototype;a.linesApiNames=a.linesApiNames||v.slice();a.pointArrayMap=a.pointArrayMap||z.slice();a.pointValKey=a.pointValKey||"top";a.areaLinesNames=a.areaLinesNames||A.slice();a.drawGraph=w;a.getGraphPath=r;a.toYData=k;a.translate=l}return b}})(g||(g={}));return g});e(a,"Stock/Indicators/AroonOscillator/AroonOscillatorIndicator.js",[a["Stock/Indicators/MultipleLinesComposition.js"],
 a["Core/Series/SeriesRegistry.js"],a["Core/Utilities.js"]],function(a,c,f){const {aroon:e}=c.seriesTypes,{extend:v,merge:t}=f;class g extends e{constructor(){super(...arguments);this.points=this.options=this.data=void 0}getValues(a,c){const e=[],f=[],g=[];let k;c=super.getValues.call(this,a,c);for(a=0;a<c.yData.length;a++){var l=c.yData[a][0];k=c.yData[a][1];l-=k;e.push([c.xData[a],l]);f.push(c.xData[a]);g.push(l)}return{values:e,xData:f,yData:g}}}g.defaultOptions=t(e.defaultOptions,{tooltip:{pointFormat:'<span style="color:{point.color}">\u25cf</span><b> {series.name}</b>: {point.y}'}});
-v(g.prototype,{nameBase:"Aroon Oscillator",linesApiNames:[],pointArrayMap:["y"],pointValKey:"y"});a.compose(e);c.registerSeriesType("aroonoscillator",g);"";return g});e(a,"masters/indicators/aroon-oscillator.src.js",[],function(){})});
-//# sourceMappingURL=aroon-oscillator.js.map
+v(g.prototype,{nameBase:"Aroon Oscillator",linesApiNames:[],pointArrayMap:["y"],pointValKey:"y"});a.compose(e);c.registerSeriesType("aroonoscillator",g);"";return g});e(a,"masters/indicators/aroon-oscillator.src.js",[],function(){})});//# sourceMappingURL=aroon-oscillator.js.map

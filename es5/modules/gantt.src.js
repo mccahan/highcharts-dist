@@ -1,5 +1,5 @@
 /**
- * @license Highcharts Gantt JS v11.1.0 (2023-06-05)
+ * @license Highcharts Gantt JS v11.1.0 (2023-08-20)
  *
  * Gantt series
  *
@@ -28,12 +28,10 @@
             obj[path] = fn.apply(null, args);
 
             if (typeof CustomEvent === 'function') {
-                window.dispatchEvent(
-                    new CustomEvent(
-                        'HighchartsModuleLoaded',
-                        { detail: { path: path, module: obj[path] }
-                    })
-                );
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
             }
         }
     }
@@ -4810,10 +4808,10 @@
                         var minInput = rangeSelector.minInput,
                     maxInput = rangeSelector.maxInput;
                     // #3274 in some case blur is not defined
-                    if (minInput && (minInput.blur)) {
+                    if (minInput && !!minInput.blur) {
                         fireEvent(minInput, 'blur');
                     }
-                    if (maxInput && (maxInput.blur)) {
+                    if (maxInput && !!maxInput.blur) {
                         fireEvent(maxInput, 'blur');
                     }
                 };
@@ -5169,11 +5167,9 @@
                     var maxInput = rangeSelector.maxInput,
                         minInput = rangeSelector.minInput,
                         chartAxis = chart.xAxis[0],
-                        dataAxis = chart.scroller && chart.scroller.xAxis ?
-                            chart.scroller.xAxis :
-                            chartAxis,
-                        dataMin = dataAxis.dataMin,
-                        dataMax = dataAxis.dataMax;
+                        unionExtremes = (chart.scroller && chart.scroller.getUnionExtremes()) || chartAxis,
+                        dataMin = unionExtremes.dataMin,
+                        dataMax = unionExtremes.dataMax;
                     var value = rangeSelector.getInputValue(name);
                     if (value !== Number(input.getAttribute('data-hc-time-previous')) &&
                         isNumber(value)) {
@@ -6641,7 +6637,8 @@
             isNumber = U.isNumber,
             isObject = U.isObject,
             merge = U.merge,
-            pick = U.pick;
+            pick = U.pick,
+            relativeLength = U.relativeLength;
         /* *
          *
          *  Constants
@@ -6836,12 +6833,12 @@
                     yAxis = this.yAxis,
                     metrics = this.columnMetrics,
                     options = this.options,
-                    borderRadius = options.borderRadius,
                     minPointLength = options.minPointLength || 0,
                     oldColWidth = (point.shapeArgs && point.shapeArgs.width || 0) / 2,
                     seriesXOffset = this.pointXOffset = metrics.offset,
                     posX = pick(point.x2,
-                    point.x + (point.len || 0));
+                    point.x + (point.len || 0)),
+                    borderRadius = options.borderRadius;
                 var plotX = point.plotX,
                     plotX2 = xAxis.translate(posX, 0, 0, 0, 1);
                 var length = Math.abs(plotX2 - plotX),
@@ -6878,19 +6875,24 @@
                     point.plotY = yAxis.translate(point.y, 0, 1, 0, 1, options.pointPlacement);
                 }
                 var x = Math.floor(Math.min(plotX,
-                    plotX2)) + crisper;
-                var x2 = Math.floor(Math.max(plotX,
-                    plotX2)) + crisper;
+                    plotX2)) + crisper,
+                    x2 = Math.floor(Math.max(plotX,
+                    plotX2)) + crisper,
+                    width = x2 - x;
+                var r = Math.min(relativeLength((typeof borderRadius === 'object' ?
+                        borderRadius.radius :
+                        borderRadius || 0),
+                    pointHeight),
+                    Math.min(width,
+                    pointHeight) / 2);
                 var shapeArgs = {
                         x: x,
                         y: Math.floor(point.plotY + yOffset) + crisper,
-                        width: x2 - x,
-                        height: pointHeight
+                        width: width,
+                        height: pointHeight,
+                        r: r
                     };
                 point.shapeArgs = shapeArgs;
-                if (isNumber(borderRadius)) {
-                    point.shapeArgs.r = borderRadius;
-                }
                 // Move tooltip to default position
                 if (!inverted) {
                     point.tooltipPos[0] -= oldColWidth +
@@ -6944,11 +6946,7 @@
                     if (!isNumber(partialFill)) {
                         partialFill = 0;
                     }
-                    if (isNumber(borderRadius)) {
-                        point.partShapeArgs = merge(shapeArgs, {
-                            r: borderRadius
-                        });
-                    }
+                    point.partShapeArgs = merge(shapeArgs);
                     clipRectWidth = Math.max(Math.round(length * partialFill + point.plotX -
                         plotX), 0);
                     point.clipRectArgs = {
@@ -8993,7 +8991,8 @@
          */
         /**
          * Set cell height for grid axis labels. By default this is calculated from font
-         * size. This option only applies to horizontal axes.
+         * size. This option only applies to horizontal axes. For vertical axes, check
+         * the [#yAxis.staticScale](yAxis.staticScale) option.
          *
          * @sample gantt/grid-axis/cellheight
          *         Gant chart with custom cell height
@@ -10733,6 +10732,12 @@
                  */
                 type: 'straight',
                 /**
+                 * The corner radius for this chart's Pathfinder connecting lines
+                 *
+                 * @since next
+                 */
+                radius: 0,
+                /**
                  * Set the default pixel width for this chart's Pathfinder connecting
                  * lines.
                  *
@@ -11476,7 +11481,188 @@
 
         return Connection;
     });
-    _registerModule(_modules, 'Gantt/PathfinderAlgorithms.js', [_modules['Core/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Series/PathUtilities.js', [], function () {
+        /* *
+         *
+         *  (c) 2010-2022 Pawel Lysy
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
+        var getLinkPath = {
+                'default': getDefaultPath,
+                straight: getStraightPath,
+                curved: getCurvedPath
+            };
+        function getDefaultPath(pathParams) {
+            var x1 = pathParams.x1,
+                y1 = pathParams.y1,
+                x2 = pathParams.x2,
+                y2 = pathParams.y2,
+                _a = pathParams.width,
+                width = _a === void 0 ? 0 : _a,
+                _b = pathParams.inverted,
+                inverted = _b === void 0 ? false : _b,
+                radius = pathParams.radius,
+                parentVisible = pathParams.parentVisible;
+            var path = [
+                    ['M',
+                x1,
+                y1],
+                    ['L',
+                x1,
+                y1],
+                    ['C',
+                x1,
+                y1,
+                x1,
+                y2,
+                x1,
+                y2],
+                    ['L',
+                x1,
+                y2],
+                    ['C',
+                x1,
+                y1,
+                x1,
+                y2,
+                x1,
+                y2],
+                    ['L',
+                x1,
+                y2]
+                ];
+            return parentVisible ?
+                applyRadius([
+                    ['M', x1, y1],
+                    ['L', x1 + width * (inverted ? -0.5 : 0.5), y1],
+                    ['L', x1 + width * (inverted ? -0.5 : 0.5), y2],
+                    ['L', x2, y2]
+                ], radius) :
+                path;
+        }
+        function getStraightPath(pathParams) {
+            var x1 = pathParams.x1,
+                y1 = pathParams.y1,
+                x2 = pathParams.x2,
+                y2 = pathParams.y2,
+                _a = pathParams.width,
+                width = _a === void 0 ? 0 : _a,
+                _b = pathParams.inverted,
+                inverted = _b === void 0 ? false : _b,
+                parentVisible = pathParams.parentVisible;
+            return parentVisible ? [
+                ['M', x1, y1],
+                ['L', x1 + width * (inverted ? -1 : 1), y2],
+                ['L', x2, y2]
+            ] : [
+                ['M', x1, y1],
+                ['L', x1, y2],
+                ['L', x1, y2]
+            ];
+        }
+        function getCurvedPath(pathParams) {
+            var x1 = pathParams.x1,
+                y1 = pathParams.y1,
+                x2 = pathParams.x2,
+                y2 = pathParams.y2,
+                _a = pathParams.offset,
+                offset = _a === void 0 ? 0 : _a,
+                _b = pathParams.width,
+                width = _b === void 0 ? 0 : _b,
+                _c = pathParams.inverted,
+                inverted = _c === void 0 ? false : _c,
+                parentVisible = pathParams.parentVisible;
+            return parentVisible ?
+                [
+                    ['M', x1, y1],
+                    [
+                        'C',
+                        x1 + offset,
+                        y1,
+                        x1 - offset + width * (inverted ? -1 : 1),
+                        y2,
+                        x1 + width * (inverted ? -1 : 1),
+                        y2
+                    ],
+                    ['L', x2, y2]
+                ] :
+                [
+                    ['M', x1, y1],
+                    ['C', x1, y1, x1, y2, x1, y2],
+                    ['L', x2, y2]
+                ];
+        }
+        /**
+         * General function to apply corner radius to a path
+         * @private
+         */
+        function applyRadius(path, r) {
+            var d = [];
+            for (var i = 0; i < path.length; i++) {
+                var x = path[i][1];
+                var y = path[i][2];
+                if (typeof x === 'number' && typeof y === 'number') {
+                    // moveTo
+                    if (i === 0) {
+                        d.push(['M', x, y]);
+                    }
+                    else if (i === path.length - 1) {
+                        d.push(['L', x, y]);
+                        // curveTo
+                    }
+                    else if (r) {
+                        var prevSeg = path[i - 1];
+                        var nextSeg = path[i + 1];
+                        if (prevSeg && nextSeg) {
+                            var x1 = prevSeg[1],
+                                y1 = prevSeg[2],
+                                x2 = nextSeg[1],
+                                y2 = nextSeg[2];
+                            // Only apply to breaks
+                            if (typeof x1 === 'number' &&
+                                typeof x2 === 'number' &&
+                                typeof y1 === 'number' &&
+                                typeof y2 === 'number' &&
+                                x1 !== x2 &&
+                                y1 !== y2) {
+                                var directionX = x1 < x2 ? 1 : -1,
+                                    directionY = y1 < y2 ? 1 : -1;
+                                d.push([
+                                    'L',
+                                    x - directionX * Math.min(Math.abs(x - x1), r),
+                                    y - directionY * Math.min(Math.abs(y - y1), r)
+                                ], [
+                                    'C',
+                                    x,
+                                    y,
+                                    x,
+                                    y,
+                                    x + directionX * Math.min(Math.abs(x - x2), r),
+                                    y + directionY * Math.min(Math.abs(y - y2), r)
+                                ]);
+                            }
+                        }
+                        // lineTo
+                    }
+                    else {
+                        d.push(['L', x, y]);
+                    }
+                }
+            }
+            return d;
+        }
+        var PathUtilities = {
+                applyRadius: applyRadius,
+                getLinkPath: getLinkPath
+            };
+
+        return PathUtilities;
+    });
+    _registerModule(_modules, 'Gantt/PathfinderAlgorithms.js', [_modules['Series/PathUtilities.js'], _modules['Core/Utilities.js']], function (PathUtilities, U) {
         /* *
          *
          *  (c) 2016 Highsoft AS
@@ -11776,8 +11962,10 @@
             });
             // Finally add the endSegment
             segments.push(endSegment);
+            var path = PathUtilities.applyRadius(pathFromSegments(segments),
+                options.radius);
             return {
-                path: pathFromSegments(segments),
+                path: path,
                 obstacles: segments
             };
         };
@@ -12323,6 +12511,12 @@
                  * @since   6.2.0
                  */
                 type: 'straight',
+                /**
+                 * The corner radius for the connector line
+                 *
+                 * @since next
+                 */
+                radius: 0,
                 /**
                  * Set the default pixel width for this chart's Pathfinder connecting
                  * lines.
@@ -13225,6 +13419,7 @@
                     animation: {
                         reversed: true // Dependencies go from child to parent
                     },
+                    radius: 0,
                     startMarker: {
                         enabled: true,
                         symbol: 'arrow-filled',
@@ -13260,7 +13455,7 @@
          * A `gantt` series.
          *
          * @extends   series,plotOptions.gantt
-         * @excluding boostThreshold, connectors, dashStyle, findNearestPointBy,
+         * @excluding boostThreshold, dashStyle, findNearestPointBy,
          *            getExtremesFromAll, marker, negativeColor, pointInterval,
          *            pointIntervalUnit, pointPlacement, pointStart
          * @product   gantt

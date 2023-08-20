@@ -19,7 +19,7 @@ import TreegraphPoint from './TreegraphPoint.js';
 import TU from '../TreeUtilities.js';
 const { getLevelOptions } = TU;
 import U from '../../Core/Utilities.js';
-const { extend, isArray, merge, pick, relativeLength, splat } = U;
+const { extend, merge, pick, relativeLength, splat } = U;
 import TreegraphLink from './TreegraphLink.js';
 import TreegraphLayout from './TreegraphLayout.js';
 import TreegraphSeriesDefaults from './TreegraphSeriesDefaults.js';
@@ -373,8 +373,15 @@ class TreegraphSeries extends TreemapSeries {
             plotSizeX - width / 2 - x :
             x - width / 2), nodeY = node.y = (!reversed ?
             plotSizeY - y - height / 2 :
-            y - height / 2), borderRadius = pick(point.options.borderRadius, level.borderRadius, this.options.borderRadius);
-        point.shapeType = 'path';
+            y - height / 2), borderRadius = pick(point.options.borderRadius, level.borderRadius, this.options.borderRadius), symbolFn = symbols[symbol || 'circle'];
+        if (symbolFn === void 0) {
+            point.hasImage = true;
+            point.shapeType = 'image';
+            point.imageUrl = symbol.match(/^url\((.*?)\)$/)[1];
+        }
+        else {
+            point.shapeType = 'path';
+        }
         if (!point.visible && point.linkToParent) {
             const parentNode = point.linkToParent.fromNode;
             if (parentNode) {
@@ -382,11 +389,12 @@ class TreegraphSeries extends TreemapSeries {
                 if (!point.shapeArgs) {
                     point.shapeArgs = {};
                 }
-                extend(point.shapeArgs, {
-                    d: symbols[symbol || 'circle'](x, y, width, height, borderRadius ? { r: borderRadius } : void 0),
-                    x,
-                    y
-                });
+                if (!point.hasImage) {
+                    extend(point.shapeArgs, {
+                        d: symbolFn(x, y, width, height, borderRadius ? { r: borderRadius } : void 0)
+                    });
+                }
+                extend(point.shapeArgs, { x, y });
                 point.plotX = parentNode.plotX;
                 point.plotY = parentNode.plotY;
             }
@@ -395,13 +403,15 @@ class TreegraphSeries extends TreemapSeries {
             point.plotX = nodeX;
             point.plotY = nodeY;
             point.shapeArgs = {
-                d: symbols[symbol || 'circle'](nodeX, nodeY, width, height, borderRadius ? { r: borderRadius } : void 0),
                 x: nodeX,
                 y: nodeY,
                 width,
                 height,
                 cursor: !point.node.isLeaf ? 'pointer' : 'default'
             };
+            if (!point.hasImage) {
+                point.shapeArgs.d = symbolFn(nodeX, nodeY, width, height, borderRadius ? { r: borderRadius } : void 0);
+            }
         }
         // Set the anchor position for tooltip.
         point.tooltipPos = chart.inverted ?
@@ -457,6 +467,7 @@ export default TreegraphSeries;
  * @sample highcharts/series-treegraph/level-options
  *          Treegraph chart with level options applied
  *
+ * @type      {Array<*>}
  * @excluding layoutStartingDirection, layoutAlgorithm
  * @apioption series.treegraph.levels
  */
@@ -464,6 +475,11 @@ export default TreegraphSeries;
  * Set collapsed status for nodes level-wise.
  * @type {boolean}
  * @apioption series.treegraph.levels.collapsed
+ */
+/**
+ * Set marker options for nodes at the level.
+ * @extends   series.treegraph.marker
+ * @apioption series.treegraph.levels.marker
  */
 /**
  * An array of data points for the series. For the `treegraph` series type,

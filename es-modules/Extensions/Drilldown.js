@@ -801,6 +801,8 @@ Chart.prototype.drillUp = function (isMultipleDrillUp) {
         chart.redraw();
     };
     let i = drilldownLevels.length, seriesI, level, oldExtremes;
+    // Reset symbol and color counters after every drill-up. (#19134)
+    chart.symbolCounter = chart.colorCounter = 0;
     while (i--) {
         let oldSeries, newSeries;
         level = drilldownLevels[i];
@@ -1334,6 +1336,8 @@ Point.prototype.runDrilldown = function (holdRedraw, category, originalEvent) {
     if (!chart.ddDupes) {
         chart.ddDupes = [];
     }
+    // Reset the color and symbol counters after every drilldown. (#19134)
+    chart.colorCounter = chart.symbolCounter = 0;
     while (i-- && !seriesOptions) {
         if (drilldown.series[i].id === this.drilldown &&
             chart.ddDupes.indexOf(this.drilldown) === -1) {

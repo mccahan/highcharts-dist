@@ -1,5 +1,5 @@
 /*
- Highcharts JS v11.1.0 (2023-06-05)
+ Highcharts JS v11.1.0 (2023-08-20)
 
  Dependency wheel module
 
@@ -16,5 +16,4 @@ b.attr({opacity:0}).animate({opacity:1},this.options.animation)},this)}}createNo
 t=!0;break}t||d.reverse();for(g=0;g<d.length;g++){if(d[g]===a)return f;f+=d[g].weight}};return b}createNodeColumns(){const a=[v.compose([],this)];this.nodes.forEach(function(b){b.column=0;a[0].push(b)});return a}getNodePadding(){return this.options.nodePadding/Math.PI}translate(){const a=this.options,b=2*Math.PI/(this.chart.plotHeight+this.getNodePadding()),f=this.getCenter(),n=(a.startAngle-90)*p,c=a.borderRadius,g="object"===typeof c?c.radius:c;q.prototype.translate.call(this);this.nodeColumns[0].forEach(function(d){if(d.sum){var c=
 d.shapeArgs;const l=f[0],p=f[1],h=f[2]/2,m=h-a.nodeWidth,k=n+b*(c.y||0);c=n+b*((c.y||0)+(c.height||0));d.angle=k+(c-k)/2;d.shapeType="arc";d.shapeArgs={x:l,y:p,r:h,innerR:m,start:k,end:c,borderRadius:g};d.dlBox={x:l+Math.cos((k+c)/2)*(h+m)/2,y:p+Math.sin((k+c)/2)*(h+m)/2,width:1,height:1};d.linksFrom.forEach(function(c){if(c.linkBase){let d;const e=c.linkBase.map(function(e,f){e*=b;let g=Math.cos(n+e)*(m+1),k=Math.sin(n+e)*(m+1),h=a.curveFactor||0;d=Math.abs(c.linkBase[3-f]*b-e);d>Math.PI&&(d=2*Math.PI-
 d);d*=m;d<m&&(h*=d/m);return{x:l+g,y:p+k,cpX:l+(1-h)*g,cpY:p+(1-h)*k}});c.shapeArgs={d:[["M",e[0].x,e[0].y],["A",m,m,0,0,1,e[1].x,e[1].y],["C",e[1].cpX,e[1].cpY,e[2].cpX,e[2].cpY,e[2].x,e[2].y],["A",m,m,0,0,1,e[3].x,e[3].y],["C",e[3].cpX,e[3].cpY,e[0].cpX,e[0].cpY,e[0].x,e[0].y]]}}})}})}}k.defaultOptions=x(q.defaultOptions,u);w(k.prototype,{orderNodes:!1,getCenter:h.prototype.getCenter});k.prototype.pointClass=b;r.registerSeriesType("dependencywheel",k);return k});b(a,"masters/modules/dependency-wheel.src.js",
-[],function(){})});
-//# sourceMappingURL=dependency-wheel.js.map
+[],function(){})});//# sourceMappingURL=dependency-wheel.js.map

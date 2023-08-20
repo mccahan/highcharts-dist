@@ -1,5 +1,5 @@
 /**
- * @license Highstock JS v11.1.0 (2023-06-05)
+ * @license Highstock JS v11.1.0 (2023-08-20)
  * @module highcharts/indicators/vwap
  * @requires highcharts
  * @requires highcharts/modules/stock
